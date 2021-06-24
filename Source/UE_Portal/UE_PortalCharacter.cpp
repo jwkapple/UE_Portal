@@ -6,11 +6,11 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
-#include "MotionControllerComponent.h"
-#include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -51,6 +51,15 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
+
+	// Zoom Timeline
+	if(ZoomCurveFloat)
+	{
+		FOnTimelineFloat ZoomTimelineProgress;
+		ZoomTimelineProgress.BindUFunction(this, TEXT("OnZoom"));
+		ZoomTimeline.AddInterpFloat(ZoomCurveFloat, ZoomTimelineProgress);
+		ZoomTimeline.SetLooping(false);
+	}
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -86,6 +95,13 @@ void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+}
+
+void AUE_PortalCharacter::OnZoomUpdate(float Value)
+{
+	float CurrentValue = FMath::Lerp(CurrentFOV, NewFOV, Value);
+
+	GetFirstPersonCameraComponent()->SetFieldOfView(CurrentFOV);
 }
 
 void AUE_PortalCharacter::OnFire()
@@ -144,4 +160,9 @@ void AUE_PortalCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void AUE_PortalCharacter::OnZoom()
+{
+	ZoomTimeline.Play();
 }

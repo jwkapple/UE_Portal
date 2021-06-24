@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/TimelineComponent.h"
 #include "UE_PortalCharacter.generated.h"
 
 class UInputComponent;
@@ -58,7 +59,6 @@ public:
 	class UAnimMontage* FireAnimation;
 
 protected:
-	
 	/** Fires a projectile. */
 	void OnFire();
 
@@ -68,18 +68,8 @@ protected:
 	/** Handles stafing movement, left and right */
 	void MoveRight(float Val);
 
-	/**
-	 * Called via input to turn at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	/**
-	 * Called via input to turn look up/down at a given rate.
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void LookUpAtRate(float Rate);
-	
+	UFUNCTION()
+	void OnZoom();
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -91,5 +81,21 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+private:
+	// Timeline related
+	FTimeline ZoomTimeline;
+
+	UFUNCTION()
+	void OnZoomUpdate(float Value);
+
+	UPROPERTY(EditAnywhere)
+	UCurveFloat* ZoomCurveFloat;
+	 
+	UPROPERTY(EditAnywhere)
+	float CurrentFOV;
+
+	UPROPERTY(EditAnywhere)
+	float NewFOV;
+	
 };
 
