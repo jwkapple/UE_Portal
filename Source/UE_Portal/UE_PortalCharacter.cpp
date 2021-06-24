@@ -95,6 +95,8 @@ void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	
+	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUE_PortalCharacter::OnZoom);
 }
 
 void AUE_PortalCharacter::OnZoomUpdate(float Value)
