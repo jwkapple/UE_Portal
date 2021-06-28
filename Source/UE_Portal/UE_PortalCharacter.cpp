@@ -2,6 +2,7 @@
 
 #include "UE_PortalCharacter.h"
 #include "UE_PortalProjectile.h"
+#include "Portal.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -115,6 +116,10 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 	CameraComponent->SetFieldOfView(CurrentValue);
 }
 
+void AUE_PortalCharacter::SpawnPortal(FVector Location, FRotator Rotator)
+{
+}
+
 void AUE_PortalCharacter::OnFire()
 {
 	// try and fire a projectile
@@ -130,10 +135,11 @@ void AUE_PortalCharacter::OnFire()
 			//Set Spawn Collision Handling Override
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-				// spawn the projectile at the muzzle
-			World->SpawnActor<AUE_PortalProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 		
+				// spawn the projectile at the muzzle
+			auto projectile = World->SpawnActor<AUE_PortalProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+
+			projectile->SetOwner(this);
 		}
 	}
 

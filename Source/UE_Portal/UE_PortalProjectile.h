@@ -21,6 +21,9 @@ class AUE_PortalProjectile : public AActor
 
 	UPROPERTY(EditAnywhere, Category = Decal)
 	UMaterialInstance* DecalM;
+
+	UPROPERTY(EditAnywhere, Category = Projectile)
+	float LifeSpan;
 public:
 	AUE_PortalProjectile();
 

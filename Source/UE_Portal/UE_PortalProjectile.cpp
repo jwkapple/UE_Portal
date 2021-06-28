@@ -13,7 +13,13 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
 	CollisionComp->OnComponentHit.AddDynamic(this, &AUE_PortalProjectile::OnHit);		// set up a notification for when this component hits something blocking
 
-
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> DECAL(TEXT("/Game/Portal/Portal_M_Inst.Portal_M_Inst"));
+	if(DECAL.Succeeded())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("DecalM Load completed"));
+		DecalM = DECAL.Object;
+	}
+	
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
@@ -32,7 +38,7 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 20.0f;
 }
 
 void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -42,14 +48,15 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
-		FVector HitLocation = Hit.GetActor()->GetActorLocation();
+		FVector HitLocation = Hit.Location + GetActorForwardVector() * 7.0f;
 		FVector HitSize(30.0f);
 		FRotator HitRotation = Hit.ImpactNormal.Rotation();
 
 		if(DecalM)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Material Detected"));
-			UGameplayStatics::SpawnDecalAttached(DecalM, HitSize, OtherComp, NAME_None, HitLocation, HitRotation);
+			UGameplayStatics::SpawnDecalAttached(DecalM, HitSize, Hit.GetComponent(), NAME_None, HitLocation, HitRotation,
+				EAttachLocation::KeepWorldPosition);
 		}
 		Destroy();
 	}

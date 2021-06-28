@@ -58,6 +58,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimMontage* FireAnimation;
 
+	UFUNCTION()
+	void SpawnPortal(FVector Location, FRotator Rotator);
 protected:
 	/** Fires a projectile. */
 	void OnFire();
@@ -87,6 +89,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = CameraSettings)
 	UCurveFloat* ZoomCurveFloat;
 private:
+
+	UPROPERTY(VisibleAnywhere, Category = Portal)
+	AActor* Portal;
+	
 	// Timeline related
 	FTimeline ZoomTimeline;
 
@@ -98,6 +104,5 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = CameraOptions)
 	float NewFOV;
-	
 };
 
