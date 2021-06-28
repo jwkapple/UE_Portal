@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "UE_PortalCharacter.h"
+
+#include "DrawDebugHelpers.h"
 #include "UE_PortalProjectile.h"
 #include "Portal.h"
 #include "Animation/AnimInstance.h"
@@ -116,8 +118,13 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 	CameraComponent->SetFieldOfView(CurrentValue);
 }
 
-void AUE_PortalCharacter::SpawnPortal(FVector Location, FRotator Rotator)
+void AUE_PortalCharacter::SpawnPortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
+	if(Portal) Portal->Destroy();
+
+	Portal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
+    Portal->SetOwner(this);
+	Cast<APortal>(Portal)->CreateDecal(Location, Rotator, HitComp);
 }
 
 void AUE_PortalCharacter::OnFire()

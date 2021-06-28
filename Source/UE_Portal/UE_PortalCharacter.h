@@ -59,7 +59,7 @@ public:
 	class UAnimMontage* FireAnimation;
 
 	UFUNCTION()
-	void SpawnPortal(FVector Location, FRotator Rotator);
+	void SpawnPortal(FVector Location, FRotator Rotator, USceneComponent* HitComp);
 protected:
 	/** Fires a projectile. */
 	void OnFire();

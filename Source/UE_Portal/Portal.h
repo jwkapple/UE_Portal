@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Portal.generated.h"
 
@@ -23,4 +25,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = StaticMesh)
+	UStaticMeshComponent* SMComponent;
+
+	UPROPERTY(EditAnywhere, Category = Material)
+	UMaterialInstance* Material;
+
+	UPROPERTY(EditAnywhere, Category = Material)
+	UDecalComponent* PortalDecal;
+	
+	UFUNCTION()
+	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION()
+	void CreateDecal(FVector Location, FRotator Rotator, USceneComponent* HitComp);
 };

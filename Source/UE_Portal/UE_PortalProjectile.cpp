@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "UE_PortalProjectile.h"
+
+#include "UE_PortalCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -48,15 +50,14 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
-		FVector HitLocation = Hit.Location + GetActorForwardVector() * 7.0f;
+		FVector HitLocation = Hit.Location + GetActorForwardVector() * 15.0f;
 		FVector HitSize(30.0f);
 		FRotator HitRotation = Hit.ImpactNormal.Rotation();
 
 		if(DecalM)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Material Detected"));
-			UGameplayStatics::SpawnDecalAttached(DecalM, HitSize, Hit.GetComponent(), NAME_None, HitLocation, HitRotation,
-				EAttachLocation::KeepWorldPosition);
+			Cast<AUE_PortalCharacter>(GetOwner())->SpawnPortal(HitLocation, HitRotation, Hit.GetComponent());
 		}
 		Destroy();
 	}
