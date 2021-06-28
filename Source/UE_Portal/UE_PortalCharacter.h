@@ -32,14 +32,14 @@ class AUE_PortalCharacter : public ACharacter
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FirstPersonCameraComponent;
+	class UCameraComponent* CameraComponent;
 
 public:
 	AUE_PortalCharacter();
 
 protected:
-	virtual void BeginPlay();
-
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 public:
 
 	/** Gun muzzle's offset from the characters location */
@@ -69,7 +69,10 @@ protected:
 	void MoveRight(float Val);
 
 	UFUNCTION()
-	void OnZoom();
+	void OnZoomIn();
+	UFUNCTION()
+	void OnZoomOut();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -79,8 +82,10 @@ public:
 	/** Returns Mesh1P subobject **/
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
-	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
 
+	UPROPERTY(EditAnywhere, Category = CameraSettings)
+	UCurveFloat* ZoomCurveFloat;
 private:
 	// Timeline related
 	FTimeline ZoomTimeline;
@@ -88,13 +93,10 @@ private:
 	UFUNCTION()
 	void OnZoomUpdate(float Value);
 
-	UPROPERTY(EditAnywhere)
-	UCurveFloat* ZoomCurveFloat;
-	 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = CameraOptions)
 	float CurrentFOV;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = CameraOptions)
 	float NewFOV;
 	
 };

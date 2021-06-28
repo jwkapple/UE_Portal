@@ -23,15 +23,15 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
 
 	// Create a CameraComponent	
-	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	CameraComponent->SetupAttachment(GetCapsuleComponent());
+	CameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
+	CameraComponent->bUsePawnControlRotation = true;
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
+	Mesh1P->SetupAttachment(CameraComponent);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
 	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
@@ -51,15 +51,6 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
-
-	// Zoom Timeline
-	if(ZoomCurveFloat)
-	{
-		FOnTimelineFloat ZoomTimelineProgress;
-		ZoomTimelineProgress.BindUFunction(this, TEXT("OnZoom"));
-		ZoomTimeline.AddInterpFloat(ZoomCurveFloat, ZoomTimelineProgress);
-		ZoomTimeline.SetLooping(false);
-	}
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -69,6 +60,24 @@ void AUE_PortalCharacter::BeginPlay()
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+
+	// Zoom Timeline
+	if(ZoomCurveFloat)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found ZoomCurveFloat"));
+		
+		FOnTimelineFloat ZoomTimelineProgress;
+		ZoomTimelineProgress.BindUFunction(this, FName("OnZoomUpdate"));
+		ZoomTimeline.AddInterpFloat(ZoomCurveFloat, ZoomTimelineProgress);
+		ZoomTimeline.SetLooping(false);
+	}
+}
+
+void AUE_PortalCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	ZoomTimeline.TickTimeline(DeltaSeconds);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,14 +105,14 @@ void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	
-	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUE_PortalCharacter::OnZoom);
+	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUE_PortalCharacter::OnZoomIn);
+	PlayerInputComponent->BindAction("Zoom", IE_Released, this, &AUE_PortalCharacter::OnZoomOut);
 }
 
 void AUE_PortalCharacter::OnZoomUpdate(float Value)
 {
 	float CurrentValue = FMath::Lerp(CurrentFOV, NewFOV, Value);
-
-	GetFirstPersonCameraComponent()->SetFieldOfView(CurrentFOV);
+	CameraComponent->SetFieldOfView(CurrentValue);
 }
 
 void AUE_PortalCharacter::OnFire()
@@ -112,7 +121,7 @@ void AUE_PortalCharacter::OnFire()
 	if (ProjectileClass != NULL)
 	{
 		UWorld* const World = GetWorld();
-		if (World != NULL)
+		if (World)
 		{
 			const FRotator SpawnRotation = GetControlRotation();
 			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
@@ -164,7 +173,11 @@ void AUE_PortalCharacter::MoveRight(float Value)
 	}
 }
 
-void AUE_PortalCharacter::OnZoom()
+void AUE_PortalCharacter::OnZoomIn()
 {
 	ZoomTimeline.Play();
+}
+void AUE_PortalCharacter::OnZoomOut()
+{
+	ZoomTimeline.Reverse();
 }
