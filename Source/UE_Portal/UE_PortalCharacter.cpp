@@ -96,8 +96,8 @@ void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	// Bind fire event
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AUE_PortalCharacter::OnFire);
-
+	PlayerInputComponent->BindAction("LFire", IE_Pressed, this, &AUE_PortalCharacter::OnLFire);
+	PlayerInputComponent->BindAction("RFire", IE_Pressed, this, &AUE_PortalCharacter::OnRFire);
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &AUE_PortalCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AUE_PortalCharacter::MoveRight);
@@ -118,13 +118,22 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 	CameraComponent->SetFieldOfView(CurrentValue);
 }
 
-void AUE_PortalCharacter::SpawnPortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
+void AUE_PortalCharacter::SpawnBluePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
-	if(Portal) Portal->Destroy();
+	if(BluePortal) BluePortal->Destroy();
 
-	Portal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
-    Portal->SetOwner(this);
-	Cast<APortal>(Portal)->CreateDecal(Location, Rotator, HitComp);
+	BluePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
+    BluePortal->SetOwner(this);
+	Cast<APortal>(BluePortal)->CreateDecal(Location, Rotator, HitComp);
+}
+
+void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
+{
+	if(OrangePortal) OrangePortal->Destroy();
+
+	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
+	OrangePortal->SetOwner(this);
+	Cast<APortal>(OrangePortal)->CreateDecal(Location, Rotator, HitComp);
 }
 
 void AUE_PortalCharacter::OnFire()
@@ -153,7 +162,7 @@ void AUE_PortalCharacter::OnFire()
 	// try and play the sound if specified
 	if (FireSound != NULL)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+		//UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 	}
 
 	// try and play a firing animation if specified
@@ -167,6 +176,10 @@ void AUE_PortalCharacter::OnFire()
 		}
 	}
 }
+
+void AUE_PortalCharacter::OnLFire(){ Color = false; OnFire(); }
+
+void AUE_PortalCharacter::OnRFire(){ Color = true; OnFire(); }
 
 void AUE_PortalCharacter::MoveForward(float Value)
 {
@@ -194,3 +207,5 @@ void AUE_PortalCharacter::OnZoomOut()
 {
 	ZoomTimeline.Reverse();
 }
+
+bool AUE_PortalCharacter::GetColor() const { return Color; }

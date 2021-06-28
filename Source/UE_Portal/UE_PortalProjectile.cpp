@@ -45,6 +45,8 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 
 void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
@@ -57,7 +59,9 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 		if(DecalM)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Material Detected"));
-			Cast<AUE_PortalCharacter>(GetOwner())->SpawnPortal(HitLocation, HitRotation, Hit.GetComponent());
+
+			if(MyOwner->GetColor()) MyOwner->SpawnOrangePortal(HitLocation, HitRotation, Hit.GetComponent());
+			MyOwner->SpawnBluePortal(HitLocation, HitRotation, Hit.GetComponent());
 		}
 		Destroy();
 	}

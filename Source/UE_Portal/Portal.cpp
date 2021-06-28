@@ -3,6 +3,7 @@
 
 #include "Portal.h"
 
+#include "UE_PortalCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -25,26 +26,34 @@ APortal::APortal()
 	SMComponent->OnComponentBeginOverlap.AddDynamic(this, &APortal::OnBeginOverlap);
 	SMComponent->OnComponentEndOverlap.AddDynamic(this, &APortal::OnOverlapEnd);
 	Material = CreateDefaultSubobject<UMaterialInstance>(TEXT("MATERIAL"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> PORTAL_M(TEXT("/Game/Portal/Portal_M_Inst.Portal_M_Inst"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> PORTAL_M(TEXT("/Game/Portal/Portal_M_Inst1.Portal_M_Inst1"));
 	if(PORTAL_M.Succeeded())
 	{
 		Material = PORTAL_M.Object;
 	}
 
 	SMComponent->SetMaterial(0, Material);
+	static ConstructorHelpers::FObjectFinder<UMaterial> SAMPLE(TEXT("/Game/Portal/SampleM.SampleM"));
+	if(SAMPLE.Succeeded())
+	{
+		//SMComponent->SetMaterial(1, SAMPLE.Object);
+	}
+
+
 }
 
 // Called when the game starts or when spawned
 void APortal::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 }
 
 // Called every frame
 void APortal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void APortal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -62,7 +71,10 @@ void APortal::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 void APortal::CreateDecal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Create Decal"));
-	PortalDecal = UGameplayStatics::SpawnDecalAttached(Material, FVector(30.0f), HitComp, NAME_None, Location, Rotator, EAttachLocation::KeepWorldPosition);
+
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), MyOwner->GetColor());
+	PortalDecal = UGameplayStatics::SpawnDecalAttached(SMComponent->GetMaterial(0), FVector(30.0f), HitComp, NAME_None, Location, Rotator, EAttachLocation::KeepWorldPosition);
 	if(PortalDecal) UE_LOG(LogTemp, Warning, TEXT("Decal detected"));
 }
 
