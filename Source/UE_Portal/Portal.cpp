@@ -19,7 +19,7 @@ APortal::APortal()
 	SetRootComponent(SMComponent);
 	
 	SMComponent->CreateDynamicMaterialInstance(0);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BOX_SM(TEXT("/Game/Geometry/Meshes/TemplateFloor.TemplateFloor"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BOX_SM(TEXT("/Game/Geometry/Meshes/Shape_Plane.Shape_Plane"));
 	if(BOX_SM.Succeeded())
 	{
 		SMComponent->SetStaticMesh(BOX_SM.Object);
@@ -51,7 +51,8 @@ void APortal::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), MyOwner->GetColor());
 }
 
 // Called every frame
@@ -76,18 +77,3 @@ void APortal::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player Exit"));
 }
-
-void APortal::CreateDecal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Create Decal"));
-
-	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
-
-	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), MyOwner->GetColor());
-	UE_LOG(LogTemp, Warning, TEXT("%d"), MyOwner->GetColor());
-	PortalDecal = UGameplayStatics::SpawnDecalAttached(SMComponent->GetMaterial(0), FVector(30.0f), HitComp, NAME_None, Location, Rotator, EAttachLocation::KeepWorldPosition);
-
-	if(PortalDecal) UE_LOG(LogTemp, Warning, TEXT("Decal detected"));
-}
-
-

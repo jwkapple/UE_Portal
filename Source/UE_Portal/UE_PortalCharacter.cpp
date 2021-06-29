@@ -120,22 +120,26 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 
 void AUE_PortalCharacter::SpawnBluePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
-	if(BluePortal)	BluePortal->Destroy();
+	if(BluePortal) BluePortal->Destroy();
 
-
-	BluePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
+	FActorSpawnParameters Param;
+	Param.Owner = this;
+	
+	BluePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
+	BluePortal->SetActorRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
     BluePortal->SetOwner(this);
-	Cast<APortal>(BluePortal)->CreateDecal(Location, Rotator, HitComp);
-}
+} 
 
 void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
 	if(OrangePortal) OrangePortal->Destroy();
 
-
-	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
+	FActorSpawnParameters Param;
+	Param.Owner = this;
+	
+	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
+	OrangePortal->SetActorRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
 	OrangePortal->SetOwner(this);
-	Cast<APortal>(OrangePortal)->CreateDecal(Location, Rotator, HitComp);
 }
 
 void AUE_PortalCharacter::OnFire()

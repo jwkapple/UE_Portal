@@ -32,9 +32,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = Material)
 	UMaterialInstance* Material;
-
-	UPROPERTY(EditAnywhere, Category = Material)
-	UDecalComponent* PortalDecal;
 	
 	UPROPERTY(EditAnywhere, Category = Material)
 	UMaterialParameterCollection* PortalMPC;
@@ -43,8 +40,4 @@ public:
 
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-	UFUNCTION()
-	void CreateDecal(FVector Location, FRotator Rotator, USceneComponent* HitComp);
-
 };
