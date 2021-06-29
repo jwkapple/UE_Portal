@@ -19,9 +19,6 @@ class AUE_PortalProjectile : public AActor
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	class UProjectileMovementComponent* ProjectileMovement;
 
-	UPROPERTY(EditAnywhere, Category = Decal)
-	UMaterialInstance* DecalM;
-
 	UPROPERTY(EditAnywhere, Category = Projectile)
 	float LifeSpan;
 public:

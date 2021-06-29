@@ -25,6 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void BeginDestroy() override;
+	
 	UPROPERTY(EditAnywhere, Category = StaticMesh)
 	UStaticMeshComponent* SMComponent;
 
@@ -34,6 +36,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = Material)
 	UDecalComponent* PortalDecal;
 	
+	UPROPERTY(EditAnywhere, Category = Material)
+	UMaterialParameterCollection* PortalMPC;
 	UFUNCTION()
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -42,4 +46,5 @@ public:
 
 	UFUNCTION()
 	void CreateDecal(FVector Location, FRotator Rotator, USceneComponent* HitComp);
+
 };

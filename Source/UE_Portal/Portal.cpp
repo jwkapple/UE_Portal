@@ -4,7 +4,10 @@
 #include "Portal.h"
 
 #include "UE_PortalCharacter.h"
+#include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Materials/MaterialParameterCollection.h"
+#include "Materials/MaterialParameterCollectionInstance.h"
 
 // Sets default values
 APortal::APortal()
@@ -16,7 +19,7 @@ APortal::APortal()
 	SetRootComponent(SMComponent);
 	
 	SMComponent->CreateDynamicMaterialInstance(0);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BOX_SM(TEXT("/Game/Geometry/Meshes/1M_Cube.1M_Cube"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BOX_SM(TEXT("/Game/Geometry/Meshes/TemplateFloor.TemplateFloor"));
 	if(BOX_SM.Succeeded())
 	{
 		SMComponent->SetStaticMesh(BOX_SM.Object);
@@ -25,6 +28,7 @@ APortal::APortal()
 	SMComponent->SetCollisionProfileName(FName("Portal"));
 	SMComponent->OnComponentBeginOverlap.AddDynamic(this, &APortal::OnBeginOverlap);
 	SMComponent->OnComponentEndOverlap.AddDynamic(this, &APortal::OnOverlapEnd);
+	
 	Material = CreateDefaultSubobject<UMaterialInstance>(TEXT("MATERIAL"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> PORTAL_M(TEXT("/Game/Portal/Portal_M_Inst1.Portal_M_Inst1"));
 	if(PORTAL_M.Succeeded())
@@ -33,13 +37,13 @@ APortal::APortal()
 	}
 
 	SMComponent->SetMaterial(0, Material);
-	static ConstructorHelpers::FObjectFinder<UMaterial> SAMPLE(TEXT("/Game/Portal/SampleM.SampleM"));
-	if(SAMPLE.Succeeded())
+
+	PortalMPC = CreateDefaultSubobject<UMaterialParameterCollection>(TEXT("MPC"));
+	static ConstructorHelpers::FObjectFinder<UMaterialParameterCollection> PMPC(TEXT("/Game/Portal/Portal_MPC.Portal_MPC"));
+	if(PMPC.Succeeded())
 	{
-		//SMComponent->SetMaterial(1, SAMPLE.Object);
+		PortalMPC = PMPC.Object;
 	}
-
-
 }
 
 // Called when the game starts or when spawned
@@ -56,8 +60,13 @@ void APortal::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void APortal::BeginDestroy()
+{
+	Super::BeginDestroy();
+}
+
 void APortal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                             int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player Enter"));
 }
@@ -73,8 +82,12 @@ void APortal::CreateDecal(FVector Location, FRotator Rotator, USceneComponent* H
 	UE_LOG(LogTemp, Warning, TEXT("Create Decal"));
 
 	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+
 	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), MyOwner->GetColor());
+	UE_LOG(LogTemp, Warning, TEXT("%d"), MyOwner->GetColor());
 	PortalDecal = UGameplayStatics::SpawnDecalAttached(SMComponent->GetMaterial(0), FVector(30.0f), HitComp, NAME_None, Location, Rotator, EAttachLocation::KeepWorldPosition);
+
 	if(PortalDecal) UE_LOG(LogTemp, Warning, TEXT("Decal detected"));
 }
+
 

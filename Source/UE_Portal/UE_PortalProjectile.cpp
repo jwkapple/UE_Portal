@@ -15,13 +15,6 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
 	CollisionComp->OnComponentHit.AddDynamic(this, &AUE_PortalProjectile::OnHit);		// set up a notification for when this component hits something blocking
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInstance> DECAL(TEXT("/Game/Portal/Portal_M_Inst.Portal_M_Inst"));
-	if(DECAL.Succeeded())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("DecalM Load completed"));
-		DecalM = DECAL.Object;
-	}
-	
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
@@ -52,17 +45,13 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
-		FVector HitLocation = Hit.Location + GetActorForwardVector() * 15.0f;
+		FVector HitLocation = Hit.ImpactPoint;
 		FVector HitSize(30.0f);
 		FRotator HitRotation = Hit.ImpactNormal.Rotation();
 
-		if(DecalM)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Material Detected"));
-
-			if(MyOwner->GetColor()) MyOwner->SpawnOrangePortal(HitLocation, HitRotation, Hit.GetComponent());
-			MyOwner->SpawnBluePortal(HitLocation, HitRotation, Hit.GetComponent());
-		}
+		if(MyOwner->GetColor()) MyOwner->SpawnOrangePortal(HitLocation, HitRotation, Hit.GetComponent());
+		else MyOwner->SpawnBluePortal(HitLocation, HitRotation, Hit.GetComponent());
+		
 		Destroy();
 	}
 }

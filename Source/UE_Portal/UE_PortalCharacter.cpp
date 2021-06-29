@@ -120,7 +120,8 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 
 void AUE_PortalCharacter::SpawnBluePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
-	if(BluePortal) BluePortal->Destroy();
+	if(BluePortal)	BluePortal->Destroy();
+
 
 	BluePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
     BluePortal->SetOwner(this);
@@ -130,6 +131,7 @@ void AUE_PortalCharacter::SpawnBluePortal(FVector Location, FRotator Rotator, US
 void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
 {
 	if(OrangePortal) OrangePortal->Destroy();
+
 
 	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator);
 	OrangePortal->SetOwner(this);
