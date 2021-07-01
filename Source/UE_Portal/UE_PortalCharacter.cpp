@@ -113,7 +113,6 @@ void AUE_PortalCharacter::SpawnBluePortal(FVector Location, FRotator Rotator, US
 	
 	BluePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
 	BluePortal->SetActorRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
-    BluePortal->SetOwner(this);
 } 
 
 void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
@@ -125,7 +124,6 @@ void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, 
 	
 	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
 	OrangePortal->SetActorRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
-	OrangePortal->SetOwner(this);
 }
 
 void AUE_PortalCharacter::OnFire()

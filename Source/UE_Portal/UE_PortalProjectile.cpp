@@ -2,10 +2,12 @@
 
 #include "UE_PortalProjectile.h"
 
+#include "DrawDebugHelpers.h"
 #include "UE_PortalCharacter.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AUE_PortalProjectile::AUE_PortalProjectile() 
 {
@@ -38,12 +40,13 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 		
 		FVector HitLocation = Hit.ImpactPoint;
 		FVector HitSize(30.0f);
-		FRotator HitRotation = FRotator(OtherActor->GetActorRotation() - Hit.ImpactPoint.Rotation());
-
+		FRotator HitRotation = FRotator(Hit.ImpactNormal.Rotation().Pitch, Hit.ImpactNormal.Rotation().Yaw,
+			Dot3(FVector4(Hit.ImpactNormal, 0.0f), FVector4(GetActorRightVector(), 0.0f)));
+		DrawDebugLine(GetWorld(), HitLocation, HitLocation + Hit.ImpactNormal * 500.0f, FColor::Red,false,10.0f, 0, 10.0f);
 		UE_LOG(LogTemp, Warning, TEXT("Roation : Roll: %f, Pitch: %f, Yaw: %f"), HitRotation.Roll, HitRotation.Pitch, HitRotation.Yaw);
 
 		if(MyOwner->GetColor()) MyOwner->SpawnOrangePortal(HitLocation, HitRotation, Hit.GetComponent());
