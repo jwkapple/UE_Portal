@@ -11,8 +11,6 @@
 #include "Components/InputComponent.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/InputSettings.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
-#include "Kismet/GameplayStatics.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -104,29 +102,7 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 	CameraComponent->SetFieldOfView(CurrentValue);
 }
 
-void AUE_PortalCharacter::SpawnBluePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
-{
-	if(BluePortal) BluePortal->Destroy();
-
-	FActorSpawnParameters Param;
-	Param.Owner = this;
-	
-	BluePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
-} 
-
-void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp)
-{
-	if(OrangePortal) OrangePortal->Destroy();
-
-	FActorSpawnParameters Param;
-	Param.Owner = this;
-	
-	UE_LOG(LogTemp, Warning, TEXT("Portal Rotation : Pitch: %f, Yaw: %f, Roll: %f"), Rotator.Pitch, Rotator.Yaw, Rotator.Roll);
-
-	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
-}
-
-void AUE_PortalCharacter::OnFire()
+void AUE_PortalCharacter::OnFire(bool Color)
 {
 	if (ProjectileClass != NULL)
 	{
@@ -138,10 +114,11 @@ void AUE_PortalCharacter::OnFire()
 
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-		
-			auto projectile = World->SpawnActor<AUE_PortalProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			ActorSpawnParams.Owner = this;
 
-			projectile->SetOwner(this);
+			auto projectile = World->SpawnActor<AUE_PortalProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			
+			Cast<AUE_PortalProjectile>(projectile)->SetColor(Color);
 		}
 	}
 
@@ -160,9 +137,9 @@ void AUE_PortalCharacter::OnFire()
 	}
 }
 
-void AUE_PortalCharacter::OnLFire(){ Color = false; OnFire(); }
+void AUE_PortalCharacter::OnLFire(){ OnFire(true); }
 
-void AUE_PortalCharacter::OnRFire(){ Color = true; OnFire(); }
+void AUE_PortalCharacter::OnRFire(){ OnFire(false); }
 
 void AUE_PortalCharacter::MoveForward(float Value)
 {
@@ -189,4 +166,27 @@ void AUE_PortalCharacter::OnZoomOut()
 	ZoomTimeline.Reverse();
 }
 
-bool AUE_PortalCharacter::GetColor() const { return Color; }
+
+void AUE_PortalCharacter::SetPortal(AActor* Portal, bool Color)
+{
+	if(Color)
+	{
+		if(BluePortal)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("BluePortal Destroy"));
+			BluePortal->Destroy();
+			BluePortal = NULL;
+		}
+		BluePortal = Portal;
+	}
+	else
+	{
+		if(OrangePortal) 
+		{
+			UE_LOG(LogTemp, Warning, TEXT("OrangePortal Destroy"));
+			OrangePortal->Destroy();
+			OrangePortal = NULL;
+		}
+		OrangePortal = Portal;
+	}
+}

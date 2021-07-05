@@ -3,11 +3,9 @@
 
 #include "Portal.h"
 
-#include "UE_PortalCharacter.h"
+#include "UE_PortalProjectile.h"
 #include "Components/DecalComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "Materials/MaterialParameterCollection.h"
-#include "Materials/MaterialParameterCollectionInstance.h"
+#include "Kismet/GameplayStatics.h"\
 
 // Sets default values
 APortal::APortal()
@@ -45,7 +43,7 @@ void APortal::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	auto MyOwner = Cast<AUE_PortalProjectile>(GetOwner());
 	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), MyOwner->GetColor());
 }
 

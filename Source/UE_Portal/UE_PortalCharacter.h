@@ -59,16 +59,11 @@ public:
 	class UAnimMontage* FireAnimation;
 
 	UFUNCTION()
-	void SpawnBluePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp);
+	void SetPortal(AActor* Portal, bool Color);
 
-	UFUNCTION()
-	void SpawnOrangePortal(FVector Location, FRotator Rotator, USceneComponent* HitComp);
-
-	UFUNCTION()
-	bool GetColor() const;
 protected:
 	/** Fires a projectile. */
-	void OnFire();
+	void OnFire(bool Color);
 	void OnLFire();
 	void OnRFire();
 	/** Handles moving forward/backward */
@@ -115,7 +110,5 @@ private:
 	UPROPERTY(EditAnywhere, Category = CameraOptions)
 	float NewFOV;
 
-	UPROPERTY(VisibleAnywhere, Category = Portal)
-	bool Color;
 };
 

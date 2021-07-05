@@ -25,8 +25,17 @@ public:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+	void SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator);
+	UFUNCTION()
+	bool GetColor() {return Color;}
+	void SetColor(bool C) { Color = C;}
 	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComp; }
 
 	FORCEINLINE class UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+
+private:
+	bool Color; // true : blue, false : orange
+	
 };
 

@@ -4,6 +4,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "UE_PortalCharacter.h"
+#include "Portal.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -32,6 +33,8 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	InitialLifeSpan = 20.0f;
+
+	Color = true;
 }
 
 void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -43,14 +46,23 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 		
 		FVector HitLocation = OtherActor->GetActorLocation() + Hit.ImpactNormal * 128.0f;
-		FVector HitSize(30.0f);
-
-		FRotator HitRotation = FRotator(Hit.ImpactNormal.Rotation().Pitch + 90.0f, Hit.ImpactNormal.Rotation().Yaw + 180.0f,
+		FRotator SpawnRotation = FRotator(Hit.ImpactNormal.Rotation().Pitch + 90.0f, Hit.ImpactNormal.Rotation().Yaw + 180.0f,
 			0.0f);
-		
-		if(MyOwner->GetColor()) MyOwner->SpawnOrangePortal(HitLocation, HitRotation, Hit.GetComponent());
-		else MyOwner->SpawnBluePortal(HitLocation, HitRotation, Hit.GetComponent());
-		
+
+		SpawnPortal(HitLocation, SpawnRotation);
+
 		Destroy();
 	}
 }
+
+void AUE_PortalProjectile::SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator)
+{
+	FActorSpawnParameters Param;
+	Param.Owner = this;
+
+	auto Portal = GetWorld()->SpawnActor<APortal>(SpawnLocation, SpawnRotator, Param);
+
+	Cast<AUE_PortalCharacter>(GetOwner())->SetPortal(Portal, Color);
+	Portal->SetOwner(GetOwner());
+}
+
