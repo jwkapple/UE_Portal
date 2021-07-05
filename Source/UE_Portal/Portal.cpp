@@ -25,8 +25,7 @@ APortal::APortal()
 		SMComponent->SetStaticMesh(BOX_SM.Object);
 	}
 
-	
-
+	SMComponent->SetWorldScale3D(FVector(2.0f, 1.5f, 1.0f));
 	SMComponent->SetCollisionProfileName(FName("Portal"));
 	SMComponent->OnComponentBeginOverlap.AddDynamic(this, &APortal::OnBeginOverlap);
 	SMComponent->OnComponentEndOverlap.AddDynamic(this, &APortal::OnOverlapEnd);
