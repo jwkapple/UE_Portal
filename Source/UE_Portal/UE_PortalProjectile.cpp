@@ -49,13 +49,13 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 		FRotator SpawnRotation = FRotator(Hit.ImpactNormal.Rotation().Pitch + 90.0f, Hit.ImpactNormal.Rotation().Yaw + 180.0f,
 			0.0f);
 
-		SpawnPortal(HitLocation, SpawnRotation);
+		SpawnPortal(HitLocation, SpawnRotation, Hit.ImpactNormal.Rotation().Vector());
 
 		Destroy();
 	}
 }
 
-void AUE_PortalProjectile::SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator)
+void AUE_PortalProjectile::SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator, FVector Normal)
 {
 	FActorSpawnParameters Param;
 	Param.Owner = this;
@@ -64,5 +64,6 @@ void AUE_PortalProjectile::SpawnPortal(FVector SpawnLocation, FRotator SpawnRota
 
 	Cast<AUE_PortalCharacter>(GetOwner())->SetPortal(Portal, Color);
 	Portal->SetOwner(GetOwner());
+	Portal->SetNormal(FRotator(SpawnRotator.Pitch - 90.0f, SpawnRotator.Yaw - 180.0f, SpawnRotator.Roll));
 }
 

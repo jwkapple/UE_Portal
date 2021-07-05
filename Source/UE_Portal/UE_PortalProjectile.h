@@ -26,7 +26,7 @@ public:
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION()
-	void SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator);
+	void SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator, FVector Normal);
 	UFUNCTION()
 	bool GetColor() {return Color;}
 	void SetColor(bool C) { Color = C;}

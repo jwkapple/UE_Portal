@@ -61,6 +61,12 @@ public:
 	UFUNCTION()
 	void SetPortal(AActor* Portal, bool Color);
 
+	UFUNCTION()
+	AActor* GetBluePortal() const {return BluePortal;}
+	UFUNCTION()
+	AActor* GetOrangePortal() const {return OrangePortal;}
+	UFUNCTION()
+	bool HasPortal() const { return BluePortal && OrangePortal;}
 protected:
 	/** Fires a projectile. */
 	void OnFire(bool Color);

@@ -3,6 +3,9 @@
 
 #include "Portal.h"
 
+
+#include "DrawDebugHelpers.h"
+#include "UE_PortalCharacter.h"
 #include "UE_PortalProjectile.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"\
@@ -44,7 +47,8 @@ void APortal::BeginPlay()
 	Super::BeginPlay();
 
 	auto MyOwner = Cast<AUE_PortalProjectile>(GetOwner());
-	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), MyOwner->GetColor());
+	Color = MyOwner->GetColor();
+	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), Color);
 }
 
 // Called every frame
@@ -62,6 +66,25 @@ void APortal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
                              int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player Enter"));
+
+	FVector WarpLocation;
+	FRotator WarpRotator;
+	APortal* Portal;
+	
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+
+	if(MyOwner->HasPortal())
+	{
+		if(Color)	Portal = Cast<APortal>(MyOwner->GetOrangePortal());
+		else		Portal = Cast<APortal>(MyOwner->GetBluePortal());
+		
+		WarpLocation = Portal->GetActorLocation() + Portal->GetNormal().Vector() * 100.0f;
+		WarpRotator = Portal->GetNormal();
+		
+		OtherActor->SetActorLocationAndRotation(WarpLocation,WarpRotator);
+
+		DrawDebugLine(GetWorld(), Portal->GetActorLocation(), Portal->GetActorLocation() + Portal->GetNormal().Vector() * 100.0f, FColor::Red, false, 10.0f, 0, 5.0f);
+	}
 }
 
 void APortal::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
