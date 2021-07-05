@@ -177,6 +177,18 @@ void AUE_PortalCharacter::SetPortal(AActor* Portal, bool Color)
 			BluePortal->Destroy();
 			BluePortal = NULL;
 		}
+
+		if(OrangePortal)
+		{
+			if(Portal->GetActorLocation() == OrangePortal->GetActorLocation())
+			{
+				OrangePortal->Destroy();
+				OrangePortal = NULL;
+
+				UE_LOG(LogTemp, Warning, TEXT("OrangePortal Destroyed by BlueProtal"));
+			}
+		}
+
 		BluePortal = Portal;
 	}
 	else
@@ -187,6 +199,16 @@ void AUE_PortalCharacter::SetPortal(AActor* Portal, bool Color)
 			OrangePortal->Destroy();
 			OrangePortal = NULL;
 		}
+		if(BluePortal)
+		{
+			if(BluePortal->GetActorLocation() == Portal->GetActorLocation())
+			{
+				BluePortal->Destroy();
+				BluePortal = NULL;
+	
+				UE_LOG(LogTemp, Warning, TEXT("BluePortal Destroyed by OrangeProtal"));
+		}
+}
 		OrangePortal = Portal;
 	}
 }
