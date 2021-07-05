@@ -37,13 +37,6 @@ APortal::APortal()
 	}
 
 	SMComponent->SetMaterial(0, Material);
-
-	PortalMPC = CreateDefaultSubobject<UMaterialParameterCollection>(TEXT("MPC"));
-	static ConstructorHelpers::FObjectFinder<UMaterialParameterCollection> PMPC(TEXT("/Game/Portal/Portal_MPC.Portal_MPC"));
-	if(PMPC.Succeeded())
-	{
-		PortalMPC = PMPC.Object;
-	}
 }
 
 // Called when the game starts or when spawned

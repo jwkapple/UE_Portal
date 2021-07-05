@@ -33,8 +33,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = Material)
 	UMaterialInstance* Material;
 	
-	UPROPERTY(EditAnywhere, Category = Material)
-	UMaterialParameterCollection* PortalMPC;
 	UFUNCTION()
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
