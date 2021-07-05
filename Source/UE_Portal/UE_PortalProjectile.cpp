@@ -42,11 +42,11 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	{
 		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 		
-		FVector HitLocation = Hit.ImpactPoint + Hit.ImpactNormal * 1.0f;
+		FVector HitLocation = OtherActor->GetActorLocation() + Hit.ImpactNormal * 128.0f;
 		FVector HitSize(30.0f);
 
 		FRotator HitRotation = FRotator(Hit.ImpactNormal.Rotation().Pitch + 90.0f, Hit.ImpactNormal.Rotation().Yaw + 180.0f,
-			Hit.ImpactNormal.Rotation().Roll);
+			0.0f);
 		
 		if(MyOwner->GetColor()) MyOwner->SpawnOrangePortal(HitLocation, HitRotation, Hit.GetComponent());
 		else MyOwner->SpawnBluePortal(HitLocation, HitRotation, Hit.GetComponent());

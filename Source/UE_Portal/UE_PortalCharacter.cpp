@@ -120,9 +120,11 @@ void AUE_PortalCharacter::SpawnOrangePortal(FVector Location, FRotator Rotator, 
 
 	FActorSpawnParameters Param;
 	Param.Owner = this;
+	
 	UE_LOG(LogTemp, Warning, TEXT("Portal Rotation : Pitch: %f, Yaw: %f, Roll: %f"), Rotator.Pitch, Rotator.Yaw, Rotator.Roll);
 
 	OrangePortal = GetWorld()->SpawnActor<APortal>(Location, Rotator, Param);
+	Cast<APortal>(OrangePortal)->GetRootComponent()->SetWorldScale3D(FVector(2.0f, 1.5f, 1.0f));
 }
 
 void AUE_PortalCharacter::OnFire()
