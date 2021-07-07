@@ -212,3 +212,9 @@ void AUE_PortalCharacter::SetPortal(AActor* Portal, bool Color)
 		OrangePortal = Portal;
 	}
 }
+
+void AUE_PortalCharacter::Warp(FVector Location, FRotator Rotation)
+{
+	SetActorLocation(Location);
+	GetController()->SetControlRotation(Rotation);
+}

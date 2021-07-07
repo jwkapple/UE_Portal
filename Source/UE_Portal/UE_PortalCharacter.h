@@ -60,7 +60,8 @@ public:
 
 	UFUNCTION()
 	void SetPortal(AActor* Portal, bool Color);
-
+	UFUNCTION()
+	void Warp(FVector Location, FRotator Rotation);
 	UFUNCTION()
 	AActor* GetBluePortal() const {return BluePortal;}
 	UFUNCTION()

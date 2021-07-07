@@ -81,7 +81,7 @@ void APortal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		WarpLocation = Portal->GetActorLocation() + Portal->GetNormal().Vector() * 100.0f;
 		WarpRotator = Portal->GetNormal();
 		
-		OtherActor->SetActorLocationAndRotation(WarpLocation,WarpRotator);
+		MyOwner->Warp(WarpLocation, WarpRotator);
 
 		DrawDebugLine(GetWorld(), Portal->GetActorLocation(), Portal->GetActorLocation() + Portal->GetNormal().Vector() * 100.0f, FColor::Red, false, 10.0f, 0, 5.0f);
 	}
