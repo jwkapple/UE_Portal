@@ -29,7 +29,7 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	ProjectileMovement->UpdatedComponent = CollisionComp;
 	ProjectileMovement->InitialSpeed = 3000.f;
 	ProjectileMovement->MaxSpeed = 3000.f;
-	ProjectileMovement->bRotationFollowsVelocity = true;
+	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = true;
 
 	InitialLifeSpan = 20.0f;
