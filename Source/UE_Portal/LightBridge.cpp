@@ -9,28 +9,32 @@ ALightBridge::ALightBridge()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Emitter = CreateDefaultSubobject<UStaticMeshComponent>("EMITTER");
-	static ConstructorHelpers::FObjectFinder<UStaticMeshComponent> EMIT(TEXT("/Game/tmp/Light_bridge_emitter.Light_bridge_emitter"));
-	if(EMIT.Succeeded())
-	{
-		Emitter = EMIT.Object;
-	}
-
+	Emitter = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EMITTER"));
 	SetRootComponent(Emitter);
 	
-	EmitterM = CreateDefaultSubobject<UMaterialInstance>("EMITTER");
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> EMIT(TEXT("/Game/tmp/Light_bridge_emitter.Light_bridge_emitter"));
+	if(EMIT.Succeeded())
+	{
+		Emitter->SetStaticMesh(EMIT.Object);
+	}
+
+	
+	Emitter->CreateDynamicMaterialInstance(0);
+	
+	EmitterM = CreateDefaultSubobject<UMaterialInstance>(TEXT("EMITTER_M"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> EMIT_M(TEXT("/Game/tmp/LightBridgeM_Inst.LightBridgeM_Inst"));
 	if(EMIT_M.Succeeded())
 	{
 		EmitterM = EMIT_M.Object;
 	}
 
-	Emitter->CreateDynamicMaterialInstance(0);
+
 	Emitter->SetMaterial(0, EmitterM);
 }
 
 void ALightBridge::PostInitializeComponents()
 {
+	Super::PostInitializeComponents();
 	
 }
 

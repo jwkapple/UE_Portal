@@ -15,6 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	ALightBridge();
 
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Emitter;
+	
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Bridge;
+
+	UPROPERTY(VisibleAnywhere)
+	UMaterialInstance* EmitterM;
 protected:
 
 	virtual void PostInitializeComponents() override;
@@ -26,12 +34,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Emitter;
-	
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Bridge;
 
-	UPROPERTY(VisibleAnywhere)
-	UMaterialInstance* EmitterM;
 };
