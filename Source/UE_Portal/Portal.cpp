@@ -19,7 +19,7 @@ APortal::APortal()
 	SMComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SM"));
 	SetRootComponent(SMComponent);
 	
-	SMComponent->CreateDynamicMaterialInstance(0);
+	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BOX_SM(TEXT("/Game/Geometry/Meshes/Shape_Plane.Shape_Plane"));
 	if(BOX_SM.Succeeded())
 	{
@@ -39,6 +39,7 @@ APortal::APortal()
 	}
 
 	SMComponent->SetMaterial(0, Material);
+	SMComponent->CreateDynamicMaterialInstance(0);
 }
 
 // Called when the game starts or when spawned

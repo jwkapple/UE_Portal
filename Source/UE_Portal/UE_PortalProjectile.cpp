@@ -22,7 +22,6 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 
 	CollisionComp->CreateDynamicMaterialInstance(0);
 	
-
 	RootComponent = CollisionComp;
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
