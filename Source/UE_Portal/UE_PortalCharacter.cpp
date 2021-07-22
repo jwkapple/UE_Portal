@@ -73,8 +73,6 @@ void AUE_PortalCharacter::Tick(float DeltaSeconds)
 	ZoomTimeline.TickTimeline(DeltaSeconds);
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
 
 void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
