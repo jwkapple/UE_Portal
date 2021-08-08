@@ -5,7 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/TimelineComponent.h"
+#include "Sound/SoundCue.h"
+
 #include "UE_PortalCharacter.generated.h"
+
+#define BLUE true
+#define ORANGE false
 
 class UInputComponent;
 
@@ -28,6 +33,12 @@ class AUE_PortalCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* BlueAudioComponent;
+	
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* OrangeAudioComponent;
 
 public:
 	AUE_PortalCharacter();
@@ -106,6 +117,13 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = CameraOptions)
 	float NewFOV;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* BlueCue;
+
+	
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* OrangeCue;
 
 };
 

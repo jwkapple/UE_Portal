@@ -7,6 +7,7 @@
 #include "Portal.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/TimelineComponent.h"
@@ -47,6 +48,23 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
+
+	// ---------------------- Sound ---------------------- 
+	BlueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BlueAudioComponent"));
+	BlueAudioComponent->SetupAttachment(GetRootComponent());
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> BLUE_C(TEXT("/Game/Sound/Effects/PortalGun/FireBlue_Cue.FireBlue_Cue"));
+	if(BLUE_C.Succeeded()) BlueCue = BLUE_C.Object;
+
+	BlueAudioComponent->SetSound(BlueCue);
+	
+	OrangeAudioComponent =  CreateDefaultSubobject<UAudioComponent>(TEXT("OrangeAudioComponent"));
+	OrangeAudioComponent->SetupAttachment(GetRootComponent());
+	
+	static ConstructorHelpers::FObjectFinder<USoundCue> ORANGE_C(TEXT("/Game/Sound/Effects/PortalGun/FireOrange_Cue.FireOrange_Cue"));
+	if(ORANGE_C.Succeeded()) OrangeCue = ORANGE_C.Object;
+
+	OrangeAudioComponent->SetSound(OrangeCue);
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -102,6 +120,9 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 
 void AUE_PortalCharacter::OnFire(bool Color)
 {
+	//if (Color == BLUE && BlueAudioComponent) BlueAudioComponent->Play();     
+	//if (Color == ORANGE && OrangeAudioComponent) OrangeAudioComponent->Play();
+	
 	if(CheckProjectile())
 	{
 		if (ProjectileClass != NULL)
@@ -122,10 +143,7 @@ void AUE_PortalCharacter::OnFire(bool Color)
 			}
 		}
 
-		if (FireSound != NULL)
-		{
-			//UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-		}
+
 
 		if (FireAnimation != NULL)
 		{
@@ -138,9 +156,17 @@ void AUE_PortalCharacter::OnFire(bool Color)
 	}	
 }
 
-void AUE_PortalCharacter::OnLFire(){ OnFire(true); }
+void AUE_PortalCharacter::OnLFire()
+{
+	if(BlueAudioComponent) BlueAudioComponent->Play();
+	OnFire(BLUE); 
+}
 
-void AUE_PortalCharacter::OnRFire(){ OnFire(false); }
+void AUE_PortalCharacter::OnRFire()
+{
+	if(OrangeAudioComponent) OrangeAudioComponent->Play();
+	OnFire(ORANGE); 
+}
 
 void AUE_PortalCharacter::MoveForward(float Value)
 {
