@@ -102,37 +102,40 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 
 void AUE_PortalCharacter::OnFire(bool Color)
 {
-	if (ProjectileClass != NULL)
+	if(CheckProjectile())
 	{
-		UWorld* const World = GetWorld();
-		if (World)
+		if (ProjectileClass != NULL)
 		{
-			const FRotator SpawnRotation = GetControlRotation();
-			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+			UWorld* const World = GetWorld();
+			if (World)
+			{
+				const FRotator SpawnRotation = GetControlRotation();
+				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
 
-			FActorSpawnParameters ActorSpawnParams;
-			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-			ActorSpawnParams.Owner = this;
+				FActorSpawnParameters ActorSpawnParams;
+				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+				ActorSpawnParams.Owner = this;
 
-			auto projectile = World->SpawnActor<AUE_PortalProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				auto projectile = World->SpawnActor<AUE_PortalProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 			
-			Cast<AUE_PortalProjectile>(projectile)->SetColor(Color);
+				Cast<AUE_PortalProjectile>(projectile)->SetColor(Color);
+			}
 		}
-	}
 
-	if (FireSound != NULL)
-	{
-		//UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	if (FireAnimation != NULL)
-	{
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != NULL)
+		if (FireSound != NULL)
 		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
+			//UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 		}
-	}
+
+		if (FireAnimation != NULL)
+		{
+			UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
+			if (AnimInstance != NULL)
+			{
+				AnimInstance->Montage_Play(FireAnimation, 1.f);
+			}
+		}
+	}	
 }
 
 void AUE_PortalCharacter::OnLFire(){ OnFire(true); }
@@ -162,6 +165,29 @@ void AUE_PortalCharacter::OnZoomIn()
 void AUE_PortalCharacter::OnZoomOut()
 {
 	ZoomTimeline.Reverse();
+}
+
+bool AUE_PortalCharacter::CheckProjectile()
+{
+	FVector sLocation = GetActorLocation();
+	FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 100.0f;
+
+	UE_LOG(LogTemp, Warning, TEXT("sLocation : %f, %f, %f"), sLocation.X, sLocation.Y, sLocation.Z);
+	FCollisionQueryParams Params;
+
+	Params.AddIgnoredActor(this);
+	Params.bTraceComplex = true;
+
+	FHitResult HResult;
+	DrawDebugLine(GetWorld(), sLocation, eLocation, FColor::Blue, false, 100.0f, 0, 10.0f);
+	if(GetWorld()->LineTraceSingleByChannel(HResult, sLocation, eLocation, ECollisionChannel::ECC_Visibility, Params))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Object Detected :: Fire Failed"));
+		return false;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Fire Successded"));
+	return true;
 }
 
 

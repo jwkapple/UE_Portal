@@ -73,7 +73,8 @@ protected:
 	void OnZoomIn();
 	UFUNCTION()
 	void OnZoomOut();
-
+	UFUNCTION()
+	bool CheckProjectile();
 protected:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
