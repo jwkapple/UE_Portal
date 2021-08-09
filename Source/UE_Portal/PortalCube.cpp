@@ -9,12 +9,22 @@ APortalCube::APortalCube()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
+	SetRootComponent(Box);
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SM"));
 }
 
 // Called when the game starts or when spawned
 void APortalCube::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void APortalCube::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 	
 }
 

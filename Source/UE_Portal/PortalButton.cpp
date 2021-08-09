@@ -38,10 +38,12 @@ APortalButton::APortalButton()
 		UE_LOG(LogTemp, Warning, TEXT("Material"));
 		Material = MM.Object;
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NO"));
+	}
 
-	PortalButton->SetMaterial(0, Material);
-	PortalButton->CreateDynamicMaterialInstance(0);
-
+	
 	// ---------------------- Sound ----------------------
 	OnAC = CreateDefaultSubobject<UAudioComponent>(TEXT("ON"));
 	OffAC = CreateDefaultSubobject<UAudioComponent>(TEXT("OFF"));
@@ -59,7 +61,7 @@ APortalButton::APortalButton()
 void APortalButton::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	PortalButton->SetMaterial(0, Material);
 }
 
 // Called every frame
