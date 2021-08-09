@@ -85,6 +85,8 @@ protected:
 	UFUNCTION()
 	void OnZoomOut();
 	UFUNCTION()
+	void OnGrab();
+	UFUNCTION()
 	bool CheckProjectile();
 protected:
 
@@ -106,6 +108,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Portal)
 	AActor* OrangePortal;
+
+	UPROPERTY(VisibleAnywhere, Category = Util)
+	TWeakObjectPtr<AActor> Grabing;
 	
 	FTimeline ZoomTimeline;
 
@@ -120,10 +125,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* BlueCue;
-
 	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* OrangeCue;
 
+	UPROPERTY(VisibleAnywhere, Category = Util)
+	bool IsGrabing;
 };
 

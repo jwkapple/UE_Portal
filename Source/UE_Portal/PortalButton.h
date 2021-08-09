@@ -6,6 +6,8 @@
 
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundCue.h"
+
 #include "PortalButton.generated.h"
 
 UCLASS()
@@ -36,7 +38,20 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* Box;
-	
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* OnAC;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* OffAC;
+
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstance* Material;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* OnCue;
+	
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* OffCue;
+	
 };

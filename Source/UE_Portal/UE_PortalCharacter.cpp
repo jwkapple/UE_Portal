@@ -51,7 +51,6 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 
 	// ---------------------- Sound ---------------------- 
 	BlueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BlueAudioComponent"));
-	BlueAudioComponent->SetupAttachment(GetRootComponent());
 
 	static ConstructorHelpers::FObjectFinder<USoundCue> BLUE_C(TEXT("/Game/Sound/Effects/PortalGun/FireBlue_Cue.FireBlue_Cue"));
 	if(BLUE_C.Succeeded()) BlueCue = BLUE_C.Object;
@@ -59,7 +58,6 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	BlueAudioComponent->SetSound(BlueCue);
 	
 	OrangeAudioComponent =  CreateDefaultSubobject<UAudioComponent>(TEXT("OrangeAudioComponent"));
-	OrangeAudioComponent->SetupAttachment(GetRootComponent());
 	
 	static ConstructorHelpers::FObjectFinder<USoundCue> ORANGE_C(TEXT("/Game/Sound/Effects/PortalGun/FireOrange_Cue.FireOrange_Cue"));
 	if(ORANGE_C.Succeeded()) OrangeCue = ORANGE_C.Object;
@@ -110,6 +108,8 @@ void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	
 	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUE_PortalCharacter::OnZoomIn);
 	PlayerInputComponent->BindAction("Zoom", IE_Released, this, &AUE_PortalCharacter::OnZoomOut);
+
+	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &AUE_PortalCharacter::OnGrab);
 }
 
 void AUE_PortalCharacter::OnZoomUpdate(float Value)
@@ -193,15 +193,57 @@ void AUE_PortalCharacter::OnZoomOut()
 	ZoomTimeline.Reverse();
 }
 
+void AUE_PortalCharacter::OnGrab()
+{
+	if(!IsGrabing)
+	{
+		FVector sLocation = GetActorLocation();
+		FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
+	
+		FCollisionQueryParams Params;
+
+		Params.AddIgnoredActor(this);
+		Params.bTraceComplex = true;
+
+		FHitResult HResult;
+
+		if(GetWorld()->LineTraceSingleByChannel(HResult, sLocation, eLocation, ECollisionChannel::ECC_Visibility, Params))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Object Detected"));
+
+			auto Box = HResult.Actor;
+			//Box->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
+			Box->DisableComponentsSimulatePhysics();
+			Box->AttachToComponent(GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
+			Box->SetOwner(this);
+
+			Grabing = Box;
+		}
+
+		IsGrabing = true;
+	}
+	else
+	{
+		if(Grabing.IsValid())
+		{
+			Grabing->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			Grabing->SetOwner(nullptr);
+
+			IsGrabing = false;
+		}
+	}
+
+}
+
 bool AUE_PortalCharacter::CheckProjectile()
 {
 	FVector sLocation = GetActorLocation();
-	FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 100.0f;
+	FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
 
 	//UE_LOG(LogTemp, Warning, TEXT("sLocation : %f, %f, %f"), sLocation.X, sLocation.Y, sLocation.Z);
 	FCollisionQueryParams Params;
 
-	Params.AddIgnoredActor(this);
+	//Params.AddIgnoredActor(this);
 	Params.bTraceComplex = true;
 
 	FHitResult HResult;

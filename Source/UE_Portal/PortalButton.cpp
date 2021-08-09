@@ -3,6 +3,8 @@
 
 #include "PortalButton.h"
 
+#include "Components/AudioComponent.h"
+
 // Sets default values
 APortalButton::APortalButton()
 {
@@ -39,6 +41,18 @@ APortalButton::APortalButton()
 
 	PortalButton->SetMaterial(0, Material);
 	PortalButton->CreateDynamicMaterialInstance(0);
+
+	// ---------------------- Sound ----------------------
+	OnAC = CreateDefaultSubobject<UAudioComponent>(TEXT("ON"));
+	OffAC = CreateDefaultSubobject<UAudioComponent>(TEXT("OFF"));
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> ONC(TEXT("/Game/Sound/Effects/Button/portal_button_up_01_Cue.portal_button_up_01_Cue"));
+	if(ONC.Succeeded()) OnCue = ONC.Object;
+	OnAC->SetSound(OnCue);
+	
+	static ConstructorHelpers::FObjectFinder<USoundCue> OFFC(TEXT("/Game/Sound/Effects/Button/portal_button_down_01_Cue.portal_button_down_01_Cue"));
+	if(OFFC.Succeeded()) OffCue = OFFC.Object;
+	OffAC->SetSound(OffCue);
 }
 
 // Called when the game starts or when spawned
@@ -55,16 +69,19 @@ void APortalButton::Tick(float DeltaTime)
 
 }
 
+void APortalButton::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+								UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player ON"));
+	OnAC->Play();
+}
 
 void APortalButton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player OFF"));
+	OffAC->Play();
 }
 
-void APortalButton::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-								UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Player ON"));
-}
+
 
