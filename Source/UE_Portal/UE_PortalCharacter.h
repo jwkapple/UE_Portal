@@ -89,14 +89,9 @@ protected:
 	UFUNCTION()
 	bool CheckProjectile();
 protected:
-
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-
-
 public:
-
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
-
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return CameraComponent; }
 
 	UPROPERTY(EditAnywhere, Category = CameraSettings)
@@ -110,7 +105,7 @@ private:
 	AActor* OrangePortal;
 
 	UPROPERTY(VisibleAnywhere, Category = Util)
-	TWeakObjectPtr<AActor> Grabing;
+	TWeakObjectPtr<AActor> PortalCube;
 	
 	FTimeline ZoomTimeline;
 

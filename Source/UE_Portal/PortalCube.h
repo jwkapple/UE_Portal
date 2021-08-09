@@ -27,10 +27,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void Grab(bool& isGrab);
 private:
-
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* Box;
+	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
+	
+	UPROPERTY(VisibleAnywhere)
+	UMaterialInstance* Material;
+
+	UPROPERTY(VisibleAnywhere, Category = Util)
+	bool IsGrabbed;
 };

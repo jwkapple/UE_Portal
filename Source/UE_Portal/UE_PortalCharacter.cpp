@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "UE_PortalProjectile.h"
 #include "Portal.h"
+#include "PortalCube.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AudioComponent.h"
@@ -211,26 +212,15 @@ void AUE_PortalCharacter::OnGrab()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Object Detected"));
 
-			auto Box = HResult.Actor;
-			//Box->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
-			Box->DisableComponentsSimulatePhysics();
-			Box->AttachToComponent(GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
-			Box->SetOwner(this);
+			PortalCube = HResult.GetActor();
 
-			Grabing = Box;
+			PortalCube->SetOwner(this);
+			Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
 		}
-
-		IsGrabing = true;
 	}
 	else
 	{
-		if(Grabing.IsValid())
-		{
-			Grabing->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-			Grabing->SetOwner(nullptr);
-
-			IsGrabing = false;
-		}
+		if(PortalCube.IsValid())Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
 	}
 
 }

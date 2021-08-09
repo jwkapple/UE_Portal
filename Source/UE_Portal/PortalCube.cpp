@@ -2,6 +2,7 @@
 
 
 #include "PortalCube.h"
+#include "UE_PortalCharacter.h"
 
 // Sets default values
 APortalCube::APortalCube()
@@ -9,17 +10,32 @@ APortalCube::APortalCube()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
-	SetRootComponent(Box);
+
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SM"));
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM(TEXT("/Game/Cube/EDITOR_cube.EDITOR_cube"));
+	if(SM.Succeeded())
+	{
+		StaticMesh->SetStaticMesh(SM.Object);
+	}
+
+	SetRootComponent(StaticMesh);
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInstance> MI(TEXT("/Game/Cube/CubeM_Inst.CubeM_Inst"));
+	if(MI.Succeeded())
+	{
+		Material = MI.Object;
+	}
 }
 
 // Called when the game starts or when spawned
 void APortalCube::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
+	StaticMesh->SetMaterial(0, Material);
 }
 
 void APortalCube::PostInitializeComponents()
@@ -33,5 +49,25 @@ void APortalCube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void APortalCube::Grab(bool& isGrab)
+{
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	if(!isGrab)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Attach"));
+		StaticMesh->SetSimulatePhysics(false);		
+		AttachToComponent(MyOwner->GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
+		isGrab = true;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Detach"));
+		StaticMesh->SetSimulatePhysics(true);
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		SetOwner(nullptr);
+		isGrab = false;
+	}
 }
 

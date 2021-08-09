@@ -22,7 +22,7 @@ APortalButton::APortalButton()
 	
 
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
-	Box->SetBoxExtent(FVector(90.0f, 90.0f, 60.0f));
+	Box->SetBoxExtent(FVector(100.0f, 100.0f, 60.0f));
 	
 	Box->SetCollisionProfileName(FName("Button"));
 	Box->SetRelativeLocation(PortalButton->GetRelativeLocation() + FVector(0.0f, 0.0f, 90.0f));
@@ -38,11 +38,7 @@ APortalButton::APortalButton()
 		UE_LOG(LogTemp, Warning, TEXT("Material"));
 		Material = MM.Object;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NO"));
-	}
-
+	PortalButton->CreateDynamicMaterialInstance(0);
 	
 	// ---------------------- Sound ----------------------
 	OnAC = CreateDefaultSubobject<UAudioComponent>(TEXT("ON"));
@@ -75,6 +71,8 @@ void APortalButton::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 								UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player ON"));
+
+	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 1);
 	OnAC->Play();
 }
 
@@ -82,6 +80,8 @@ void APortalButton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player OFF"));
+
+	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 0);
 	OffAC->Play();
 }
 
