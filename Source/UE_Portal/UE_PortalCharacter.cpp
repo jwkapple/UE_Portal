@@ -230,21 +230,17 @@ bool AUE_PortalCharacter::CheckProjectile()
 	FVector sLocation = GetActorLocation();
 	FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
 
-	//UE_LOG(LogTemp, Warning, TEXT("sLocation : %f, %f, %f"), sLocation.X, sLocation.Y, sLocation.Z);
 	FCollisionQueryParams Params;
 
 	//Params.AddIgnoredActor(this);
 	Params.bTraceComplex = true;
 
 	FHitResult HResult;
-	//DrawDebugLine(GetWorld(), sLocation, eLocation, FColor::Blue, false, 100.0f, 0, 10.0f);
 	if(GetWorld()->LineTraceSingleByChannel(HResult, sLocation, eLocation, ECollisionChannel::ECC_Visibility, Params))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Object Detected :: Fire Failed"));
 		return false;
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("Fire Successded"));
 	return true;
 }
 
