@@ -4,7 +4,6 @@
 
 #include "DrawDebugHelpers.h"
 #include "UE_PortalProjectile.h"
-#include "Portal.h"
 #include "PortalCube.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -37,15 +36,21 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
 
-	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			
-	FP_Gun->bCastDynamicShadow = false;
-	FP_Gun->CastShadow = false;
+	PortalGun = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Portal_Gun"));
+	PortalGun->SetOnlyOwnerSee(true);
+	PortalGun->bCastDynamicShadow = false;
+	PortalGun->CastShadow = false;
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> PortalGunSM(TEXT("/Game/Portal_Gun/portal-gun.portal-gun"));
+	if(PortalGunSM.Succeeded())
+	{
+		PortalGun->SetStaticMesh(PortalGunSM.Object);
+	}
 	
-	FP_Gun->SetupAttachment(RootComponent);
+	PortalGun->SetupAttachment(RootComponent);
 
 	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	FP_MuzzleLocation->SetupAttachment(FP_Gun);
+	FP_MuzzleLocation->SetupAttachment(PortalGun);
 	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
@@ -70,7 +75,7 @@ void AUE_PortalCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	PortalGun->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("GripPoint"));
 
 	if(ZoomCurveFloat)
 	{
