@@ -46,11 +46,17 @@ APortalButton::APortalButton()
 
 	static ConstructorHelpers::FObjectFinder<USoundCue> ONC(TEXT("/Game/Sound/Effects/Button/portal_button_up_01_Cue.portal_button_up_01_Cue"));
 	if(ONC.Succeeded()) OnCue = ONC.Object;
+	
+	OnAC->SetAutoActivate(false);
 	OnAC->SetSound(OnCue);
+	
 	
 	static ConstructorHelpers::FObjectFinder<USoundCue> OFFC(TEXT("/Game/Sound/Effects/Button/portal_button_down_01_Cue.portal_button_down_01_Cue"));
 	if(OFFC.Succeeded()) OffCue = OFFC.Object;
+
+	OffAC->SetAutoActivate(false);
 	OffAC->SetSound(OffCue);
+	
 }
 
 // Called when the game starts or when spawned

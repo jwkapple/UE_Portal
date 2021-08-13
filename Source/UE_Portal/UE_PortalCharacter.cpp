@@ -47,18 +47,21 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 
 	// ---------------------- Sound ---------------------- 
 	BlueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BlueAudioComponent"));
-
+	BlueAudioComponent->SetAutoActivate(false);
+	
 	static ConstructorHelpers::FObjectFinder<USoundCue> BLUE_C(TEXT("/Game/Sound/Effects/PortalGun/FireBlue_Cue.FireBlue_Cue"));
 	if(BLUE_C.Succeeded()) BlueCue = BLUE_C.Object;
 
 	BlueAudioComponent->SetSound(BlueCue);
 	
 	OrangeAudioComponent =  CreateDefaultSubobject<UAudioComponent>(TEXT("OrangeAudioComponent"));
+	OrangeAudioComponent->SetAutoActivate(false);
 	
 	static ConstructorHelpers::FObjectFinder<USoundCue> ORANGE_C(TEXT("/Game/Sound/Effects/PortalGun/FireOrange_Cue.FireOrange_Cue"));
 	if(ORANGE_C.Succeeded()) OrangeCue = ORANGE_C.Object;
 
 	OrangeAudioComponent->SetSound(OrangeCue);
+	
 }
 
 void AUE_PortalCharacter::BeginPlay()

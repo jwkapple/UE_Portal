@@ -6,6 +6,8 @@
 
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundCue.h"
+
 #include "Portal.generated.h"
 
 UCLASS()
@@ -38,6 +40,12 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, Category = Portal)
 	bool Color;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	UAudioComponent* EnterSound;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* EnterBGMCue;
 	
 	UFUNCTION()
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "UE_PortalCharacter.h"
 #include "UE_PortalProjectile.h"
+#include "Components/AudioComponent.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"\
 
@@ -40,6 +41,17 @@ APortal::APortal()
 
 	SMComponent->SetMaterial(0, Material);
 	SMComponent->CreateDynamicMaterialInstance(0);
+
+	EnterSound = CreateDefaultSubobject<UAudioComponent>(TEXT("ENTER"));
+	EnterSound->SetAutoActivate(false);
+	
+	static ConstructorHelpers::FObjectFinder<USoundCue> EnterBGM(TEXT("/Game/Sound/Effects/PortalGun/portal_enter2_Cue.portal_enter2_Cue"));
+	if(EnterBGM.Succeeded())
+	{
+		EnterBGMCue = EnterBGM.Object;
+
+		EnterSound->SetSound(EnterBGMCue);	
+	}
 }
 
 // Called when the game starts or when spawned
@@ -81,9 +93,11 @@ void APortal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		
 		WarpLocation = Portal->GetActorLocation() + Portal->GetNormal().Vector() * 100.0f;
 		WarpRotator = Portal->GetNormal();
-		
+
+		EnterSound->Play();
 		MyOwner->Warp(WarpLocation, WarpRotator);
 
+		
 		DrawDebugLine(GetWorld(), Portal->GetActorLocation(), Portal->GetActorLocation() + Portal->GetNormal().Vector() * 100.0f, FColor::Red, false, 10.0f, 0, 5.0f);
 	}
 }
