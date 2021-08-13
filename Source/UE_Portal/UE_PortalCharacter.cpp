@@ -13,12 +13,6 @@
 #include "Components/TimelineComponent.h"
 #include "GameFramework/InputSettings.h"
 
-
-DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
-
-//////////////////////////////////////////////////////////////////////////
-// AUE_PortalCharacter
-
 AUE_PortalCharacter::AUE_PortalCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -49,10 +43,6 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	
 	PortalGun->SetupAttachment(RootComponent);
 
-	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	FP_MuzzleLocation->SetupAttachment(PortalGun);
-	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
-
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
 
 	// ---------------------- Sound ---------------------- 
@@ -75,7 +65,7 @@ void AUE_PortalCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PortalGun->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("GripPoint"));
+	PortalGun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false), TEXT("GripPoint"));
 
 	if(ZoomCurveFloat)
 	{
@@ -126,9 +116,6 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 
 void AUE_PortalCharacter::OnFire(bool Color)
 {
-	//if (Color == BLUE && BlueAudioComponent) BlueAudioComponent->Play();     
-	//if (Color == ORANGE && OrangeAudioComponent) OrangeAudioComponent->Play();
-	
 	if(CheckProjectile())
 	{
 		if (ProjectileClass != NULL)
@@ -137,8 +124,8 @@ void AUE_PortalCharacter::OnFire(bool Color)
 			if (World)
 			{
 				const FRotator SpawnRotation = GetControlRotation();
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
 
+				const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
 				FActorSpawnParameters ActorSpawnParams;
 				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 				ActorSpawnParams.Owner = this;
