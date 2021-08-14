@@ -20,7 +20,6 @@ APortalButton::APortalButton()
 
 	SetRootComponent(PortalButton);
 	
-
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	Box->SetBoxExtent(FVector(100.0f, 100.0f, 60.0f));
 	
@@ -43,19 +42,15 @@ APortalButton::APortalButton()
 	// ---------------------- Sound ----------------------
 	OnAC = CreateDefaultSubobject<UAudioComponent>(TEXT("ON"));
 	OffAC = CreateDefaultSubobject<UAudioComponent>(TEXT("OFF"));
-
-	static ConstructorHelpers::FObjectFinder<USoundCue> ONC(TEXT("/Game/Sound/Effects/Button/portal_button_up_01_Cue.portal_button_up_01_Cue"));
-	if(ONC.Succeeded()) OnCue = ONC.Object;
 	
-	OnAC->SetAutoActivate(false);
-	OnAC->SetSound(OnCue);
+	static ConstructorHelpers::FObjectFinder<USoundCue> ONC(TEXT("/Game/Sound/Effects/Button/portal_button_down_01_Cue.portal_button_down_01_Cue"));
+	if(ONC.Succeeded()) { OnCue = ONC.Object; OnAC->SetSound(OnCue); UE_LOG(LogTemp, Warning, TEXT("ONC Activate"));}
 	
 	
-	static ConstructorHelpers::FObjectFinder<USoundCue> OFFC(TEXT("/Game/Sound/Effects/Button/portal_button_down_01_Cue.portal_button_down_01_Cue"));
-	if(OFFC.Succeeded()) OffCue = OFFC.Object;
-
-	OffAC->SetAutoActivate(false);
-	OffAC->SetSound(OffCue);
+	
+	static ConstructorHelpers::FObjectFinder<USoundCue> OFFC(TEXT("/Game/Sound/Effects/Button/portal_button_up_01_Cue.portal_button_up_01_Cue"));
+	if(OFFC.Succeeded()){ OffCue = OFFC.Object; OffAC->SetSound(OffCue); UE_LOG(LogTemp, Warning, TEXT("OFFC Activate"));}
+	
 	
 }
 
@@ -78,8 +73,9 @@ void APortalButton::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player ON"));
 
-	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 1);
 	OnAC->Play();
+	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 1);
+	
 }
 
 void APortalButton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -87,8 +83,8 @@ void APortalButton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 {
 	UE_LOG(LogTemp, Warning, TEXT("Player OFF"));
 
-	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 0);
 	OffAC->Play();
+	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 0);	
 }
 
 

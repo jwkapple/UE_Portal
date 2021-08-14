@@ -35,6 +35,9 @@ class AUE_PortalCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	class UAudioComponent* OrangeAudioComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* GrabAudioComponent;
+
 public:
 	AUE_PortalCharacter();
 
@@ -118,6 +121,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* OrangeCue;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* GrabCue;
 
 	UPROPERTY(VisibleAnywhere, Category = Util)
 	bool IsGrabing;

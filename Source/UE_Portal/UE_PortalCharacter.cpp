@@ -46,22 +46,26 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
 
 	// ---------------------- Sound ---------------------- 
-	BlueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BlueAudioComponent"));
+	BlueAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BlueAC"));
 	BlueAudioComponent->SetAutoActivate(false);
 	
 	static ConstructorHelpers::FObjectFinder<USoundCue> BLUE_C(TEXT("/Game/Sound/Effects/PortalGun/FireBlue_Cue.FireBlue_Cue"));
 	if(BLUE_C.Succeeded()) BlueCue = BLUE_C.Object;
-
 	BlueAudioComponent->SetSound(BlueCue);
 	
-	OrangeAudioComponent =  CreateDefaultSubobject<UAudioComponent>(TEXT("OrangeAudioComponent"));
+	OrangeAudioComponent =  CreateDefaultSubobject<UAudioComponent>(TEXT("OrangeAC"));
 	OrangeAudioComponent->SetAutoActivate(false);
 	
 	static ConstructorHelpers::FObjectFinder<USoundCue> ORANGE_C(TEXT("/Game/Sound/Effects/PortalGun/FireOrange_Cue.FireOrange_Cue"));
 	if(ORANGE_C.Succeeded()) OrangeCue = ORANGE_C.Object;
-
 	OrangeAudioComponent->SetSound(OrangeCue);
-	
+
+	GrabAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("GrabAC"));
+	GrabAudioComponent->SetAutoActivate(false);
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/portal_grab_loop_Cue.portal_grab_loop_Cue"));
+	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
+	GrabAudioComponent->SetSound(GrabCue);
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -210,11 +214,14 @@ void AUE_PortalCharacter::OnGrab()
 			PortalCube = HResult.GetActor();
 
 			PortalCube->SetOwner(this);
+
+			GrabAudioComponent->Play();
 			Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
 		}
 	}
 	else
 	{
+		GrabAudioComponent->StopDelayed(0.1f);
 		if(PortalCube.IsValid())Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
 	}
 
