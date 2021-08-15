@@ -29,7 +29,7 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	ProjectileMovement->InitialSpeed = 3000.f;
 	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bRotationFollowsVelocity = false;
-	ProjectileMovement->bShouldBounce = true;
+	ProjectileMovement->bShouldBounce = false;
 
 	InitialLifeSpan = 20.0f;
 
@@ -50,8 +50,10 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 
 		SpawnPortal(HitLocation, SpawnRotation, Hit.ImpactNormal.Rotation().Vector());
 
-		Destroy();
+		
 	}
+
+	Destroy();
 }
 
 void AUE_PortalProjectile::SpawnPortal(FVector SpawnLocation, FRotator SpawnRotator, FVector Normal)
