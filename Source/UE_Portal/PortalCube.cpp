@@ -22,6 +22,12 @@ APortalCube::APortalCube()
 
 	SetRootComponent(StaticMesh);
 
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HITBOX"));
+	HitBox->SetBoxExtent(FVector(150.0f));
+
+	HitBox->SetupAttachment(RootComponent);
+	HitBox->SetRelativeLocation(FVector(-10.0f, -60.0f, 80.0f));
+	
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> MI(TEXT("/Game/Cube/CubeM_Inst.CubeM_Inst"));
 	if(MI.Succeeded())
 	{

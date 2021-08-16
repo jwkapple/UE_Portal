@@ -33,6 +33,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* HitBox;
 	
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstance* Material;
