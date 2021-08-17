@@ -24,7 +24,7 @@ APortalButton::APortalButton()
 	Box->SetBoxExtent(FVector(100.0f, 100.0f, 60.0f));
 	
 	Box->SetCollisionProfileName(FName("Button"));
-	Box->SetRelativeLocation(PortalButton->GetRelativeLocation() + FVector(0.0f, 0.0f, 90.0f));
+	Box->SetRelativeLocation(PortalButton->GetRelativeLocation());
 	Box->SetupAttachment(PortalButton);
 
     Box->OnComponentBeginOverlap.AddDynamic(this, &APortalButton::OnBeginOverlap);
