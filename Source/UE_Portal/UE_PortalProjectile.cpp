@@ -26,8 +26,9 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 3000.f;
-	ProjectileMovement->MaxSpeed = 3000.f;
+	ProjectileMovement->ProjectileGravityScale = 0.0f;
+	ProjectileMovement->InitialSpeed = 6000.f;
+	ProjectileMovement->MaxSpeed = 6000.f;
 	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = false;
 
@@ -39,8 +40,9 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
-	
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
+
+	UE_LOG(LogTemp, Warning, TEXT("OnHit"));
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
 		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 		
@@ -50,7 +52,7 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 
 		SpawnPortal(HitLocation, SpawnRotation, Hit.ImpactNormal.Rotation().Vector());
 
-		
+		UE_LOG(LogTemp, Warning, TEXT("Portal Loaded!"));
 	}
 
 	Destroy();
