@@ -85,7 +85,7 @@ protected:
 	UFUNCTION()
 	void OnZoomOut();
 	UFUNCTION()
-	void OnGrab();
+	void OnInteract();
 	UFUNCTION()
 	bool CheckProjectile();
 protected:

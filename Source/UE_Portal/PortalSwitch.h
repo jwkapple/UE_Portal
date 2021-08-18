@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+#include "Interactable.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Sound/SoundCue.h"
@@ -11,7 +12,7 @@
 #include "PortalSwitch.generated.h"
 
 UCLASS()
-class UE_PORTAL_API APortalSwitch : public AActor
+class UE_PORTAL_API APortalSwitch : public AInteractable
 {
 	GENERATED_BODY()
 	
@@ -33,15 +34,13 @@ protected:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	virtual void Interact() override;
 private:
 	UPROPERTY(VisibleAnywhere, Category = Mesh)
 	UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = Material)
 	UMaterialInstance* Material;
-
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* HitBox;
 
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	UAudioComponent* ClickOnSound;
@@ -54,4 +53,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* ClickOffCue;
+
+	UPROPERTY(VisibleAnywhere)
+	bool IsActive;
 };

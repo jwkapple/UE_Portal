@@ -22,16 +22,6 @@ APortalSwitch::APortalSwitch()
 	StaticMesh->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
 	SetRootComponent(StaticMesh);
 	
-	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HITBOX"));
-	HitBox->SetBoxExtent(FVector(150.0f,150.0f,75.0f));
-	HitBox->SetRelativeLocation(FVector(0.0f,60.0f,90.0f));
-
-	HitBox->OnComponentBeginOverlap.AddDynamic(this, &APortalSwitch::OnBeginOverlap);
-	HitBox->OnComponentEndOverlap.AddDynamic(this, &APortalSwitch::OnOverlapEnd);
-	
-	HitBox->SetupAttachment(RootComponent);
-	
-	
 	Material = CreateDefaultSubobject<UMaterialInstance>(TEXT("MATERIAL"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> MI(TEXT("/Game/PedestalButton/PedestalButtonM_Inst.PedestalButtonM_Inst"));
 	if(MI.Succeeded())
@@ -77,6 +67,22 @@ void APortalSwitch::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
                                  UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	ClickOffSound->Play();	
+}
+
+void APortalSwitch::Interact()
+{
+	if(!IsActive)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Switch Activated"));
+		ClickOnSound->Play();
+		IsActive = true;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Switch Deactivated"));
+		ClickOffSound->Play();
+		IsActive = false;
+	}
 }
 
 // Called every frame

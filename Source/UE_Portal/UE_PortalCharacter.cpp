@@ -107,7 +107,7 @@ void AUE_PortalCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAction("Zoom", IE_Pressed, this, &AUE_PortalCharacter::OnZoomIn);
 	PlayerInputComponent->BindAction("Zoom", IE_Released, this, &AUE_PortalCharacter::OnZoomOut);
 
-	PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &AUE_PortalCharacter::OnGrab);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AUE_PortalCharacter::OnInteract);
 }
 
 void AUE_PortalCharacter::OnZoomUpdate(float Value)
@@ -188,7 +188,7 @@ void AUE_PortalCharacter::OnZoomOut()
 	ZoomTimeline.Reverse();
 }
 
-void AUE_PortalCharacter::OnGrab()
+void AUE_PortalCharacter::OnInteract()
 {
 	if(IsValid(PortalCube))
 	{
