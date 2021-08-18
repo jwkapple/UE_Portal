@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 
+#include "Interactable.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "PortalCube.generated.h"
 
+class USoundCue;
 UCLASS()
-class UE_PORTAL_API APortalCube : public AActor
+class UE_PORTAL_API APortalCube : public AInteractable
 {
 	GENERATED_BODY()
 	
@@ -27,8 +29,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Interact() override;
+	
 	UFUNCTION()
 	void Grab(bool& isGrab);
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* GrabAudioComponent;
 private:
 	
 	UPROPERTY(VisibleAnywhere)
@@ -39,5 +46,9 @@ private:
 	UMaterialInstance* Material;
 
 	UPROPERTY(VisibleAnywhere, Category = Util)
-	bool IsGrabbed;
+	bool IsGrab;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* GrabCue;
+
 };

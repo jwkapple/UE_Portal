@@ -3,6 +3,7 @@
 
 #include "PortalCube.h"
 #include "UE_PortalCharacter.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 APortalCube::APortalCube()
@@ -27,6 +28,13 @@ APortalCube::APortalCube()
 	{
 		Material = MI.Object;
 	}
+
+	GrabAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("GrabAC"));
+	GrabAudioComponent->SetAutoActivate(false);
+
+	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/portal_grab_loop_Cue.portal_grab_loop_Cue"));
+	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
+	GrabAudioComponent->SetSound(GrabCue);
 }
 
 // Called when the game starts or when spawned
@@ -34,7 +42,6 @@ void APortalCube::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
 	StaticMesh->SetMaterial(0, Material);
 }
 
@@ -49,6 +56,30 @@ void APortalCube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void APortalCube::Interact()
+{
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	if(!MyOwner->GetPortalCube())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Attach"));
+
+		GrabAudioComponent->Play();
+		StaticMesh->SetSimulatePhysics(false);		
+		AttachToComponent(MyOwner->GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
+		MyOwner->SetPortalCube(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Detach"));
+
+		GrabAudioComponent->Stop();
+		StaticMesh->SetSimulatePhysics(true);
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		MyOwner->SetPortalCube(nullptr);
+		SetOwner(nullptr);
+	}
 }
 
 void APortalCube::Grab(bool& isGrab)

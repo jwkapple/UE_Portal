@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Interactable.h"
 #include "GameFramework/Character.h"
 #include "Components/TimelineComponent.h"
 #include "Sound/SoundCue.h"
@@ -34,10 +36,6 @@ class AUE_PortalCharacter : public ACharacter
 	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	class UAudioComponent* OrangeAudioComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = Sound)
-	class UAudioComponent* GrabAudioComponent;
-
 public:
 	AUE_PortalCharacter();
 
@@ -68,6 +66,10 @@ public:
 	AActor* GetOrangePortal() const {return OrangePortal;}
 	UFUNCTION()
 	bool HasPortal() const { return BluePortal && OrangePortal;}
+	UFUNCTION()
+	void SetPortalCube(AInteractable* Cube) { PortalCube = Cube;}
+	UFUNCTION()
+	bool GetPortalCube() const { return IsValid(PortalCube); }
 protected:
 
 	void OnFire(bool Color);
@@ -103,7 +105,7 @@ private:
 	AActor* OrangePortal;
 
 	UPROPERTY(VisibleAnywhere, Category = Util)
-	TWeakObjectPtr<AActor> PortalCube;
+	AInteractable* PortalCube;
 	
 	FTimeline ZoomTimeline;
 
@@ -122,10 +124,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* OrangeCue;
 
-	UPROPERTY(VisibleAnywhere, Category = Sound)
-	USoundCue* GrabCue;
 
-	UPROPERTY(VisibleAnywhere, Category = Util)
-	bool IsGrabing;
 };
 

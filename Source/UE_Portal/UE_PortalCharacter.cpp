@@ -60,12 +60,7 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	if(ORANGE_C.Succeeded()) OrangeCue = ORANGE_C.Object;
 	OrangeAudioComponent->SetSound(OrangeCue);
 
-	GrabAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("GrabAC"));
-	GrabAudioComponent->SetAutoActivate(false);
 
-	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/portal_grab_loop_Cue.portal_grab_loop_Cue"));
-	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
-	GrabAudioComponent->SetSound(GrabCue);
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -195,6 +190,37 @@ void AUE_PortalCharacter::OnZoomOut()
 
 void AUE_PortalCharacter::OnGrab()
 {
+	if(IsValid(PortalCube))
+	{
+		PortalCube->Interact();
+	}
+	else
+	{
+		FVector sLocation = GetActorLocation();
+		FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
+	
+		FCollisionQueryParams Params;
+
+		Params.AddIgnoredActor(this);
+		Params.bTraceComplex = true;
+
+		FHitResult HResult;
+
+		if(GetWorld()->LineTraceSingleByChannel(HResult, sLocation, eLocation, ECollisionChannel::ECC_Visibility, Params))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Object Detected"));
+
+			auto Item = Cast<AInteractable>(HResult.GetActor());
+
+			if(Item)
+			{
+				Item->SetOwner(this);
+				Item->Interact();
+			}
+		}
+	}
+
+	/*
 	if(!IsGrabing)
 	{
 		FVector sLocation = GetActorLocation();
@@ -224,7 +250,7 @@ void AUE_PortalCharacter::OnGrab()
 		GrabAudioComponent->StopDelayed(0.1f);
 		if(PortalCube.IsValid())Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
 	}
-
+	*/
 }
 
 bool AUE_PortalCharacter::CheckProjectile()
