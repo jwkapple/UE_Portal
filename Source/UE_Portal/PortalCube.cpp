@@ -32,7 +32,7 @@ APortalCube::APortalCube()
 	GrabAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("GrabAC"));
 	GrabAudioComponent->SetAutoActivate(false);
 
-	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/portal_grab_loop_Cue.portal_grab_loop_Cue"));
+	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/hold_loop_Cue.hold_loop_Cue"));
 	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
 	GrabAudioComponent->SetSound(GrabCue);
 }

@@ -123,7 +123,5 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* OrangeCue;
-
-
 };
 

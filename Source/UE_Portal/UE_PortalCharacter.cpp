@@ -219,38 +219,6 @@ void AUE_PortalCharacter::OnInteract()
 			}
 		}
 	}
-
-	/*
-	if(!IsGrabing)
-	{
-		FVector sLocation = GetActorLocation();
-		FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
-	
-		FCollisionQueryParams Params;
-
-		Params.AddIgnoredActor(this);
-		Params.bTraceComplex = true;
-
-		FHitResult HResult;
-
-		if(GetWorld()->LineTraceSingleByChannel(HResult, sLocation, eLocation, ECollisionChannel::ECC_Visibility, Params))
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Object Detected"));
-
-			PortalCube = HResult.GetActor();
-
-			PortalCube->SetOwner(this);
-
-			GrabAudioComponent->Play();
-			Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
-		}
-	}
-	else
-	{
-		GrabAudioComponent->StopDelayed(0.1f);
-		if(PortalCube.IsValid())Cast<APortalCube>(PortalCube)->Grab(IsGrabing);
-	}
-	*/
 }
 
 bool AUE_PortalCharacter::CheckProjectile()
