@@ -43,6 +43,7 @@ void APortalCube::BeginPlay()
 	Super::BeginPlay();
 
 	StaticMesh->SetMaterial(0, Material);
+	StaticMesh->CreateDynamicMaterialInstance(0);
 }
 
 void APortalCube::PostInitializeComponents()
@@ -80,6 +81,12 @@ void APortalCube::Interact()
 		MyOwner->SetPortalCube(nullptr);
 		SetOwner(nullptr);
 	}
+}
+
+void APortalCube::SetActivate()
+{
+	IsActivate = !IsActivate;
+	StaticMesh->SetScalarParameterValueOnMaterials(TEXT("IsActivate"), IsActivate);
 }
 
 void APortalCube::Grab(bool& isGrab)

@@ -30,6 +30,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact() override;
+
+	void SetActivate();
 	
 	UFUNCTION()
 	void Grab(bool& isGrab);
@@ -48,6 +50,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Util)
 	bool IsGrab;
 
+	UPROPERTY(VisibleAnywhere)
+	bool IsActivate;
+	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* GrabCue;
 

@@ -118,6 +118,9 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 
 void AUE_PortalCharacter::OnFire(bool Color)
 {
+	if(Color) BlueAudioComponent->Play();
+	else OrangeAudioComponent->Play();
+	
 	if(CheckProjectile())
 	{
 		if (ProjectileClass != NULL)
@@ -153,14 +156,12 @@ void AUE_PortalCharacter::OnFire(bool Color)
 
 void AUE_PortalCharacter::OnLFire()
 {
-	if(BlueAudioComponent) BlueAudioComponent->Play();
-	OnFire(BLUE); 
+	if(!IsValid(PortalCube)) OnFire(BLUE); 
 }
 
 void AUE_PortalCharacter::OnRFire()
 {
-	if(OrangeAudioComponent) OrangeAudioComponent->Play();
-	OnFire(ORANGE); 
+	if(!IsValid(PortalCube)) OnFire(ORANGE); 
 }
 
 void AUE_PortalCharacter::MoveForward(float Value)
