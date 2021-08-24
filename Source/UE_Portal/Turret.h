@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "Interactable.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Turret.generated.h"
 
@@ -25,4 +27,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Interact() override;
+private:
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* HitBox;
+
+	UPROPERTY(VisibleAnywhere)
+	UBehaviorTreeComponent* TurretBT;
+	
+	UPROPERTY(VisibleAnywhere)
+	UBlackboardComponent* TurretBB;
+
+	UPROPERTY(VisibleAnywhere)
+	
 };

@@ -15,6 +15,7 @@ AInteractable::AInteractable()
 void AInteractable::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 }
 
