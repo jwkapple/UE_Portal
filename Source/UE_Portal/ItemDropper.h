@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Receiver.h"
+
 #include "ItemDropper.generated.h"
 
 UCLASS()
-class UE_PORTAL_API AItemDropper : public AActor
+class UE_PORTAL_API AItemDropper : public AReceiver
 {
 	GENERATED_BODY()
 	
@@ -23,4 +25,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Interact() override;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	UMaterialInstance* Material;
+	
+	UPROPERTY(VisibleAnywhere)
+	class AActor* Box;
 };
