@@ -20,6 +20,9 @@ class UE_PORTAL_API APortalSwitch : public AInteractable
 public:	
 	// Sets default values for this actor's properties
 	APortalSwitch();
+	
+	UPROPERTY(EditAnywhere)
+	class AReceiver* Receiver = nullptr;
 
 protected:
 	// Called when the game starts or when spawned
@@ -58,6 +61,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	bool IsActive;
 
-	UPROPERTY(VisibleAnywhere)
-	class AReceiver* Receiver = nullptr;
+
 };

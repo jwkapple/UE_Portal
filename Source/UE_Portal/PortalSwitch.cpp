@@ -76,6 +76,10 @@ void APortalSwitch::Interact()
 		UE_LOG(LogTemp, Warning, TEXT("Switch Activated"));
 		ClickOnSound->Play();
 		IsActive = true;
+		if(Receiver)
+		{
+			Receiver->Interact();
+		}
 	}
 	else
 	{

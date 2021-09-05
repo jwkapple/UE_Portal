@@ -47,6 +47,6 @@ void AItemDropper::Tick(float DeltaTime)
 
 void AItemDropper::Interact()
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Interact"));
 }
 

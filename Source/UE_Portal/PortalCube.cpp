@@ -11,8 +11,6 @@ APortalCube::APortalCube()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
-
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SM"));
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM(TEXT("/Game/Cube/EDITOR_cube.EDITOR_cube"));
@@ -22,7 +20,8 @@ APortalCube::APortalCube()
 	}
 
 	SetRootComponent(StaticMesh);
-
+	StaticMesh->SetSimulatePhysics(true);
+	
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> MI(TEXT("/Game/Cube/CubeM_Inst.CubeM_Inst"));
 	if(MI.Succeeded())
 	{
