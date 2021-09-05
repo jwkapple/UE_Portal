@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 
 #include "Interactable.h"
-#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Turret.generated.h"
@@ -35,12 +34,4 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* HitBox;
 
-	UPROPERTY(VisibleAnywhere)
-	UBehaviorTreeComponent* TurretBT;
-	
-	UPROPERTY(VisibleAnywhere)
-	UBlackboardComponent* TurretBB;
-
-	UPROPERTY(VisibleAnywhere)
-	
 };

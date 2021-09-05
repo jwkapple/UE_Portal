@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 
+#include "Receiver.h"
 #include "Interactable.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
@@ -56,4 +57,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	bool IsActive;
+
+	UPROPERTY(VisibleAnywhere)
+	class AReceiver* Receiver = nullptr;
 };
