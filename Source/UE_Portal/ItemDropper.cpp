@@ -19,6 +19,7 @@ AItemDropper::AItemDropper()
 		StaticMesh->SetStaticMesh(SM.Object);
 	}
 
+	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
 	SetRootComponent(StaticMesh);
 	
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> MI(TEXT("/Game/Models/ItemDropper/MI_ItemDropper.MI_ItemDropper"));
@@ -29,6 +30,13 @@ AItemDropper::AItemDropper()
 	}
 
 	StaticMesh->SetMaterial(0, Material);
+
+	Plank = CreateDefaultSubobject<UBoxComponent>(TEXT("Plank"));
+	Plank->SetBoxExtent(FVector(60.0f, 60.0f, 3.0f));
+	Plank->SetupAttachment(GetRootComponent());
+	Plank->SetRelativeLocation(FVector(0.0f, -50.0f, 0.0f));
+	Plank->SetRelativeRotation(FRotator(90.0f,00.0f,0.0f));
+	Plank->SetCollisionProfileName(TEXT("BlockAll"));
 }
 
 // Called when the game starts or when spawned

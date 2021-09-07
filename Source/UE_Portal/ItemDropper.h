@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Receiver.h"
+#include "Components/BoxComponent.h"
 
 #include "ItemDropper.generated.h"
 
@@ -34,6 +35,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstance* Material;
 	
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* Plank;
 	UPROPERTY(VisibleAnywhere)
 	class AActor* Box;
 };
