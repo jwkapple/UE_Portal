@@ -39,4 +39,14 @@ private:
 	UBoxComponent* Plank;
 	UPROPERTY(VisibleAnywhere)
 	class AActor* Box;
+
+	UPROPERTY(VisibleAnywhere, Category = Function)
+	bool isActive;
+
+	UPROPERTY(VisibleAnywhere, Category = Cube)
+	class AActor* CurCube;
+
+	UPROPERTY(VisibleAnywhere, Category = Cube)
+   	class AActor* PrevCube;
+    	
 };

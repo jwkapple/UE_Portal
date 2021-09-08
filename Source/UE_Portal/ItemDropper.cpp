@@ -3,6 +3,8 @@
 
 #include "ItemDropper.h"
 
+#include "PortalCube.h"
+
 // Sets default values
 AItemDropper::AItemDropper()
 {
@@ -43,7 +45,8 @@ AItemDropper::AItemDropper()
 void AItemDropper::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CurCube = GetWorld()->SpawnActor<APortalCube>(GetActorLocation(), FRotator::ZeroRotator);
 }
 
 // Called every frame
@@ -56,5 +59,17 @@ void AItemDropper::Tick(float DeltaTime)
 void AItemDropper::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Interact"));
+	if(!isActive)
+	{
+		isActive = true;
+		Plank->SetCollisionProfileName(TEXT("NoColiision"));
+	}
+
+	else
+	{
+		
+	}
+
+
 }
 
