@@ -44,9 +44,11 @@ private:
 	bool isActive;
 
 	UPROPERTY(VisibleAnywhere, Category = Cube)
-	class AActor* CurCube;
+	class AActor* Cube;
 
 	UPROPERTY(VisibleAnywhere, Category = Cube)
-   	class AActor* PrevCube;
-    	
+	FVector CubeSpawnLocation;
+
+	UPROPERTY(VisibleAnywhere, Category = Cube)
+	FRotator CubeSpawnRotation;
 };
