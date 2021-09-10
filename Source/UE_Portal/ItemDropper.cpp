@@ -40,8 +40,7 @@ AItemDropper::AItemDropper()
 	Plank->SetRelativeRotation(FRotator(90.0f,00.0f,0.0f));
 	Plank->SetCollisionProfileName(TEXT("BlockAll"));
 
-	CubeSpawnLocation = GetActorLocation() + FVector(0.0f, 50.0f, 40.0f);
-	CubeSpawnRotation = FRotator(30.0f, 30.0f,  0.0f);
+	
 }
 
 // Called when the game starts or when spawned
@@ -49,6 +48,9 @@ void AItemDropper::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CubeSpawnLocation = GetActorLocation() + FVector(0.0f, 50.0f, 40.0f);
+	CubeSpawnRotation = FRotator(30.0f, 30.0f,  0.0f);
+	
 	Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation );
 }
 
@@ -63,12 +65,17 @@ void AItemDropper::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Interact"));
 
-	if(!isActive) isActive = true;
-	else
-	{
-		Cube->Destroy();
-		Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation);
-	}
-	Plank->SetCollisionProfileName(TEXT("NoCollision"));
+	Cube->Destroy();
+	Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation);
+	SetPlankCollision();
+
+	GetWorldTimerManager().SetTimer(TimeHandler, this, &AItemDropper::SetPlankCollision, 3.0f, false);
+}
+
+void AItemDropper::SetPlankCollision()
+{
+	IsBlocking = !IsBlocking;
+	Plank->SetCollisionProfileName(IsBlocking ? TEXT("BlockAll") : TEXT("NoCollision"));
+	Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation );
 }
 

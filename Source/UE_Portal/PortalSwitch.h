@@ -59,7 +59,10 @@ private:
 	USoundCue* ClickOffCue;
 
 	UPROPERTY(VisibleAnywhere)
-	bool IsActive;
-
-
+	bool CanActivate; //
+	
+	FTimerHandle TimeHandler;
+	
+	UFUNCTION()
+	void SwitchActivate();
 };

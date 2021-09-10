@@ -43,6 +43,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Function)
 	bool isActive;
 
+	UPROPERTY(VisibleAnywhere, Category = Plank)
+	bool IsBlocking = true;
+
 	UPROPERTY(VisibleAnywhere, Category = Cube)
 	class AActor* Cube;
 
@@ -51,4 +54,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Cube)
 	FRotator CubeSpawnRotation;
+
+	FTimerHandle TimeHandler;
+	
+	UFUNCTION()
+	void SetPlankCollision();
 };

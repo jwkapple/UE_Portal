@@ -3,6 +3,7 @@
 
 #include "PortalSwitch.h"
 
+#include "PortalCube.h"
 #include "Components/AudioComponent.h"
 
 // Sets default values
@@ -54,7 +55,8 @@ APortalSwitch::APortalSwitch()
 void APortalSwitch::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	CanActivate = true;
 }
 
 void APortalSwitch::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -71,22 +73,23 @@ void APortalSwitch::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 
 void APortalSwitch::Interact()
 {
-	if(!IsActive)
+	if(CanActivate)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Switch Activated"));
 		ClickOnSound->Play();
-		IsActive = true;
-		if(Receiver)
-		{
-			Receiver->Interact();
-		}
+		CanActivate = false;
+
+		if(Receiver) Receiver->Interact();
+
+		GetWorldTimerManager().SetTimer(TimeHandler, this, &APortalSwitch::SwitchActivate, 3.0f, false);
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Switch Deactivated"));
-		ClickOffSound->Play();
-		IsActive = false;
-	}
+}
+
+void APortalSwitch::SwitchActivate()
+{
+	CanActivate = true;
+	UE_LOG(LogTemp, Warning, TEXT("Switch Deactivated"));
+	ClickOffSound->Play();
 }
 
 // Called every frame
