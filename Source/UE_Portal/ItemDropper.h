@@ -50,6 +50,9 @@ private:
 	class AActor* Cube;
 
 	UPROPERTY(VisibleAnywhere, Category = Cube)
+	class AActor* NextCube;
+	
+	UPROPERTY(VisibleAnywhere, Category = Cube)
 	FVector CubeSpawnLocation;
 
 	UPROPERTY(VisibleAnywhere, Category = Cube)
@@ -59,4 +62,7 @@ private:
 	
 	UFUNCTION()
 	void SetPlankCollision();
+
+	UFUNCTION()
+	void SpawnCube();
 };

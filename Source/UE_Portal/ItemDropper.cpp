@@ -65,17 +65,35 @@ void AItemDropper::Interact()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Interact"));
 
-	Cube->Destroy();
-	Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation);
 	SetPlankCollision();
 
-	GetWorldTimerManager().SetTimer(TimeHandler, this, &AItemDropper::SetPlankCollision, 3.0f, false);
+	if(IsValid(NextCube))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: NextCube is Valid"));
+		Cube->Destroy();
+		Cube = NextCube;
+	}
+	
+	GetWorldTimerManager().SetTimer(TimeHandler, this, &AItemDropper::SetPlankCollision, 1.5f, false);
+	
 }
 
 void AItemDropper::SetPlankCollision()
 {
 	IsBlocking = !IsBlocking;
+	if(IsBlocking)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Plank On"));
+	}
+	else UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Plank Off"));
+	
 	Plank->SetCollisionProfileName(IsBlocking ? TEXT("BlockAll") : TEXT("NoCollision"));
-	Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation );
+	GetWorldTimerManager().SetTimer(TimeHandler, this, &AItemDropper::SpawnCube, 0.5f, false);
+}
+
+void AItemDropper::SpawnCube()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ItemDropper:: Cube"));
+	NextCube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation);
 }
 

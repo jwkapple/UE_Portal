@@ -81,7 +81,7 @@ void APortalSwitch::Interact()
 
 		if(Receiver) Receiver->Interact();
 
-		GetWorldTimerManager().SetTimer(TimeHandler, this, &APortalSwitch::SwitchActivate, 3.0f, false);
+		GetWorldTimerManager().SetTimer(TimeHandler, this, &APortalSwitch::SwitchActivate, 2.0f, false);
 	}
 }
 
