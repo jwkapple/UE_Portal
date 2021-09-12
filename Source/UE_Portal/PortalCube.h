@@ -35,9 +35,6 @@ public:
 	
 	UFUNCTION()
 	void Grab(bool& isGrab);
-
-	UPROPERTY(VisibleAnywhere, Category = Sound)
-	class UAudioComponent* GrabAudioComponent;
 private:
 	
 	UPROPERTY(VisibleAnywhere)
@@ -52,8 +49,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	bool IsActivate;
-	
-	UPROPERTY(VisibleAnywhere, Category = Sound)
-	USoundCue* GrabCue;
-
 };

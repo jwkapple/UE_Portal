@@ -60,7 +60,12 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	if(ORANGE_C.Succeeded()) OrangeCue = ORANGE_C.Object;
 	OrangeAudioComponent->SetSound(OrangeCue);
 
+	GrabAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("GrabAC"));
+	GrabAudioComponent->SetAutoActivate(false);
 
+	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/hold_loop_Cue.hold_loop_Cue"));
+	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
+	GrabAudioComponent->SetSound(GrabCue);
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -116,6 +121,14 @@ void AUE_PortalCharacter::OnZoomUpdate(float Value)
 	CameraComponent->SetFieldOfView(CurrentValue);
 }
 
+void AUE_PortalCharacter::SetInteractable(AInteractable* interact)
+{
+	if(interact == nullptr) GrabAudioComponent->Stop();
+	else GrabAudioComponent->Play();
+	
+	Interactable = interact;
+}
+
 void AUE_PortalCharacter::OnFire(bool Color)
 {
 	if(Color) BlueAudioComponent->Play();
@@ -140,8 +153,6 @@ void AUE_PortalCharacter::OnFire(bool Color)
 				Cast<AUE_PortalProjectile>(projectile)->SetColor(Color);
 			}
 		}
-
-
 
 		if (FireAnimation != NULL)
 		{

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 
 #include "Interactable.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/TimelineComponent.h"
 #include "Sound/SoundCue.h"
@@ -36,6 +37,9 @@ class AUE_PortalCharacter : public ACharacter
 	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	class UAudioComponent* OrangeAudioComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	class UAudioComponent* GrabAudioComponent;
 public:
 	AUE_PortalCharacter();
 
@@ -67,7 +71,7 @@ public:
 	UFUNCTION()
 	bool HasPortal() const { return BluePortal && OrangePortal;}
 	UFUNCTION()
-	void SetInteractable(AInteractable* interact) { Interactable = interact;}
+	void SetInteractable(AInteractable* interact);
 	UFUNCTION()
 	bool GetInteractable() const { return IsValid(Interactable); }
 protected:
@@ -123,5 +127,8 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* OrangeCue;
+
+	UPROPERTY(VisibleAnywhere, Category = Sound)
+	USoundCue* GrabCue;
 };
 

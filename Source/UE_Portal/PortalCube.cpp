@@ -27,13 +27,6 @@ APortalCube::APortalCube()
 	{
 		Material = MI.Object;
 	}
-
-	GrabAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("GrabAC"));
-	GrabAudioComponent->SetAutoActivate(false);
-
-	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/hold_loop_Cue.hold_loop_Cue"));
-	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
-	GrabAudioComponent->SetSound(GrabCue);
 }
 
 // Called when the game starts or when spawned
@@ -65,7 +58,6 @@ void APortalCube::Interact()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PortalCube :: Attach"));
 
-		GrabAudioComponent->Play();
 		StaticMesh->SetSimulatePhysics(false);		
 		AttachToComponent(MyOwner->GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
 		MyOwner->SetInteractable(this);
@@ -74,7 +66,6 @@ void APortalCube::Interact()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("PortalCube :: Detach"));
 
-		GrabAudioComponent->Stop();
 		StaticMesh->SetSimulatePhysics(true);
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		MyOwner->SetInteractable(nullptr);

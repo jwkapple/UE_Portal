@@ -33,5 +33,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* HitBox;
-
 };
