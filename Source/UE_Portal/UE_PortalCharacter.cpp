@@ -156,12 +156,12 @@ void AUE_PortalCharacter::OnFire(bool Color)
 
 void AUE_PortalCharacter::OnLFire()
 {
-	if(!IsValid(PortalCube)) OnFire(BLUE); 
+	if(!IsValid(Interactable)) OnFire(BLUE); 
 }
 
 void AUE_PortalCharacter::OnRFire()
 {
-	if(!IsValid(PortalCube)) OnFire(ORANGE); 
+	if(!IsValid(Interactable)) OnFire(ORANGE); 
 }
 
 void AUE_PortalCharacter::MoveForward(float Value)
@@ -191,14 +191,14 @@ void AUE_PortalCharacter::OnZoomOut()
 
 void AUE_PortalCharacter::OnInteract()
 {
-	if(IsValid(PortalCube))
+	if(IsValid(Interactable))
 	{
-		PortalCube->Interact();
+		Interactable->Interact();
 	}
 	else
 	{
 		FVector sLocation = GetActorLocation();
-		FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
+		FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 500.0f;
 	
 		FCollisionQueryParams Params;
 

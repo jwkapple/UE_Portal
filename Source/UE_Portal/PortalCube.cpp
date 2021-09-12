@@ -61,23 +61,23 @@ void APortalCube::Tick(float DeltaTime)
 void APortalCube::Interact()
 {
 	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
-	if(!MyOwner->GetPortalCube())
+	if(!MyOwner->GetInteractable())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Attach"));
+		UE_LOG(LogTemp, Warning, TEXT("PortalCube :: Attach"));
 
 		GrabAudioComponent->Play();
 		StaticMesh->SetSimulatePhysics(false);		
 		AttachToComponent(MyOwner->GetMesh1P(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Grab"));
-		MyOwner->SetPortalCube(this);
+		MyOwner->SetInteractable(this);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Detach"));
+		UE_LOG(LogTemp, Warning, TEXT("PortalCube :: Detach"));
 
 		GrabAudioComponent->Stop();
 		StaticMesh->SetSimulatePhysics(true);
 		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		MyOwner->SetPortalCube(nullptr);
+		MyOwner->SetInteractable(nullptr);
 		SetOwner(nullptr);
 	}
 }

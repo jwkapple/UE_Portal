@@ -67,9 +67,9 @@ public:
 	UFUNCTION()
 	bool HasPortal() const { return BluePortal && OrangePortal;}
 	UFUNCTION()
-	void SetPortalCube(AInteractable* Cube) { PortalCube = Cube;}
+	void SetInteractable(AInteractable* interact) { Interactable = interact;}
 	UFUNCTION()
-	bool GetPortalCube() const { return IsValid(PortalCube); }
+	bool GetInteractable() const { return IsValid(Interactable); }
 protected:
 
 	void OnFire(bool Color);
@@ -105,7 +105,7 @@ private:
 	AActor* OrangePortal;
 
 	UPROPERTY(VisibleAnywhere, Category = Util)
-	AInteractable* PortalCube;
+	AInteractable* Interactable;
 	
 	FTimeline ZoomTimeline;
 

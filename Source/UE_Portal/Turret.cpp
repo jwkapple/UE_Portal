@@ -2,7 +2,7 @@
 
 
 #include "Turret.h"
-
+#include "UE_PortalCharacter.h"
 // Sets default values
 ATurret::ATurret()
 {
@@ -41,6 +41,23 @@ void ATurret::Tick(float DeltaTime)
 
 void ATurret::Interact()
 {
-	
+	auto MyOwner = Cast<AUE_PortalCharacter>(GetOwner());
+	if(!MyOwner->GetInteractable())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PortalCube :: Attach"));
+		
+		StaticMesh->SetSimulatePhysics(false);		
+		AttachToComponent(MyOwner->GetMesh1P(), FAttachmentTransformRules::KeepWorldTransform, TEXT("Grab"));
+		MyOwner->SetInteractable(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PortalCube :: Detach"));
+
+		StaticMesh->SetSimulatePhysics(true);
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		MyOwner->SetInteractable(nullptr);
+		SetOwner(nullptr);
+	}
 }
 
