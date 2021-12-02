@@ -33,7 +33,7 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = false;
 	ProjectileMovement->bShouldBounce = false;
 
-	InitialLifeSpan = 20.0f;
+	InitialLifeSpan = 15.0f;
 
 	Color = true;
 }
