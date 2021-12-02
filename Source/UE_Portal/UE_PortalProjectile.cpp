@@ -12,6 +12,7 @@
 
 AUE_PortalProjectile::AUE_PortalProjectile() 
 {
+
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
@@ -22,7 +23,7 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 
 	CollisionComp->CreateDynamicMaterialInstance(0);
 	CollisionComp->SetVisibility(false);
-	RootComponent = CollisionComp;
+	SetRootComponent(CollisionComp);
 	
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
@@ -35,6 +36,13 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	InitialLifeSpan = 20.0f;
 
 	Color = true;
+}
+
+void AUE_PortalProjectile::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("Visibility OFF"));
 }
 
 void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

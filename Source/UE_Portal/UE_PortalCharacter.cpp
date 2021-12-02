@@ -136,6 +136,7 @@ void AUE_PortalCharacter::OnFire(bool Color)
 	
 	if(CheckProjectile())
 	{
+		
 		if (ProjectileClass != NULL)
 		{
 			UWorld* const World = GetWorld();
@@ -233,7 +234,7 @@ void AUE_PortalCharacter::OnInteract()
 	}
 }
 
-bool AUE_PortalCharacter::CheckProjectile()
+bool AUE_PortalCharacter::CheckProjectile() // Check whether projectile can be spawned
 {
 	FVector sLocation = GetActorLocation();
 	FVector eLocation = sLocation + GetMesh()->GetForwardVector() * 200.0f;
