@@ -22,6 +22,7 @@ AUE_PortalProjectile::AUE_PortalProjectile()
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
 
 	CollisionComp->CreateDynamicMaterialInstance(0);
+	CollisionComp->SetVisibility(false);
 	SetRootComponent(CollisionComp);
 	
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
