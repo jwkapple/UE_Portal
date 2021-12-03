@@ -66,6 +66,14 @@ AUE_PortalCharacter::AUE_PortalCharacter()
 	static ConstructorHelpers::FObjectFinder<USoundCue> GRAB_C(TEXT("/Game/Sound/Effects/PortalGun/hold_loop_Cue.hold_loop_Cue"));
 	if(GRAB_C.Succeeded()) GrabCue = GRAB_C.Object;
 	GrabAudioComponent->SetSound(GrabCue);
+
+	// Niagara Effects
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NS(TEXT("/Game/Effects/PortalFireEffect.PortalFireEffect"));
+	if(NS.Succeeded())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NIAGARA EFEECT SET"));
+		PortalFireEffect = NS.Object;
+	}
 }
 
 void AUE_PortalCharacter::BeginPlay()
@@ -162,6 +170,13 @@ void AUE_PortalCharacter::OnFire(bool Color)
 			{
 				AnimInstance->Montage_Play(FireAnimation, 1.f);
 			}
+		}
+
+		if(PortalFireEffect->IsValid())
+		{	
+			UE_LOG(LogTemp, Warning, TEXT("NIAGARA EFEECT ON"));
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, PortalFireEffect, PortalGun->GetComponentLocation(), CameraComponent->GetComponentRotation());
+			Shoot = true;
 		}
 	}	
 }

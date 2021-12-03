@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 
 #include "Interactable.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "Components/AudioComponent.h"
 #include "GameFramework/Character.h"
 #include "Components/TimelineComponent.h"
@@ -40,9 +42,15 @@ class AUE_PortalCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	class UAudioComponent* GrabAudioComponent;
+
 public:
 	AUE_PortalCharacter();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = Effect)
+	class UNiagaraSystem* PortalFireEffect;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = Effect)
+	bool Shoot;
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
