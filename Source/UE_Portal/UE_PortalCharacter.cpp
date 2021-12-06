@@ -175,8 +175,10 @@ void AUE_PortalCharacter::OnFire(bool Color)
 		if(PortalFireEffect->IsValid())
 		{	
 			UE_LOG(LogTemp, Warning, TEXT("NIAGARA EFEECT ON"));
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, PortalFireEffect, PortalGun->GetComponentLocation(), CameraComponent->GetComponentRotation());
-			Shoot = true;
+			FRotator CameraRotator = CameraComponent->GetComponentRotation();
+			CameraRotator.Yaw += 180.0f;
+			CameraRotator.Pitch *= -1.0f;
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, PortalFireEffect, PortalGun->GetComponentLocation(), CameraRotator);
 		}
 	}	
 }

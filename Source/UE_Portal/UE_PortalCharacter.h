@@ -49,8 +49,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = Effect)
 	class UNiagaraSystem* PortalFireEffect;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = Effect)
-	bool Shoot;
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
