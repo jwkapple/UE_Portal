@@ -3,12 +3,10 @@
 
 #include "Portal.h"
 
-
 #include "DrawDebugHelpers.h"
 #include "UE_PortalCharacter.h"
 #include "UE_PortalProjectile.h"
 #include "Components/AudioComponent.h"
-#include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"\
 
 // Sets default values
@@ -52,6 +50,13 @@ APortal::APortal()
 
 		EnterSound->SetSound(EnterBGMCue);	
 	}
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NS(TEXT("/Game/Effects/PortalSpawnEffect.PortalSpawnEffect"));
+	if(NS.Succeeded())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found Portal Spawn Effect"));
+		SpawnEffect = NS.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -62,6 +67,16 @@ void APortal::BeginPlay()
 	auto MyOwner = Cast<AUE_PortalProjectile>(GetOwner());
 	Color = MyOwner->GetColor();
 	SMComponent->SetScalarParameterValueOnMaterials(FName("Color"), Color);
+
+	if(SpawnEffect->IsValid())
+	{
+		FVector SpawnLocation = GetRootComponent()->GetRelativeLocation();
+		FRotator SpawnRotation = GetRootComponent()->GetRelativeRotation();
+
+		UE_LOG(LogTemp, Warning, TEXT("Spawn Portal Spawn Effect"));
+
+		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, SpawnEffect, SpawnLocation, SpawnRotation);
+	}
 }
 
 // Called every frame

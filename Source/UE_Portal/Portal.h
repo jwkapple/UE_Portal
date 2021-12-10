@@ -7,6 +7,8 @@
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Sound/SoundCue.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "Portal.generated.h"
 
@@ -46,7 +48,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* EnterBGMCue;
-	
+
+	UPROPERTY(VisibleAnywhere, Category = Effect)
+	class UNiagaraSystem* SpawnEffect;
 	UFUNCTION()
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
