@@ -70,12 +70,12 @@ void APortal::BeginPlay()
 
 	if(SpawnEffect->IsValid())
 	{
-		FVector SpawnLocation = GetRootComponent()->GetRelativeLocation();
-		FRotator SpawnRotation = GetRootComponent()->GetRelativeRotation();
+		FVector SpawnLocation = GetRootComponent()->GetComponentLocation();
+		FRotator SpawnRotation = GetRootComponent()->GetComponentRotation();
 
 		UE_LOG(LogTemp, Warning, TEXT("Spawn Portal Spawn Effect"));
 
-		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, SpawnEffect, SpawnLocation, SpawnRotation);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, SpawnEffect, SpawnLocation, SpawnRotation);
 	}
 }
 
