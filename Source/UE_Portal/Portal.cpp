@@ -54,7 +54,6 @@ APortal::APortal()
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NS(TEXT("/Game/Effects/PortalSpawnEffect.PortalSpawnEffect"));
 	if(NS.Succeeded())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Found Portal Spawn Effect"));
 		SpawnEffect = NS.Object;
 	}
 }
@@ -72,10 +71,8 @@ void APortal::BeginPlay()
 	{
 		FVector SpawnLocation = GetRootComponent()->GetComponentLocation();
 		FRotator SpawnRotation = GetRootComponent()->GetComponentRotation();
-
-		UE_LOG(LogTemp, Warning, TEXT("Spawn Portal Spawn Effect"));
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, SpawnEffect, SpawnLocation, SpawnRotation);
+		
+		SpawnEffectComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, SpawnEffect, SpawnLocation, SpawnRotation);
 	}
 }
 

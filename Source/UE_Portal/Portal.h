@@ -50,7 +50,11 @@ public:
 	USoundCue* EnterBGMCue;
 
 	UPROPERTY(VisibleAnywhere, Category = Effect)
-	class UNiagaraSystem* SpawnEffect;
+	UNiagaraSystem* SpawnEffect;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Effect)
+	UNiagaraComponent* SpawnEffectComponent;
+	
 	UFUNCTION()
 	void OnBeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
