@@ -21,10 +21,7 @@ UCLASS(config=Game)
 class AUE_PortalCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
-	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
-	class USkeletalMeshComponent* Mesh1P;
-
+`1
 	UPROPERTY(VisibleAnywhere, Category = Mesh)
 	class UStaticMeshComponent* PortalGun;
 	

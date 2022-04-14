@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "LightBridge.generated.h"
 
@@ -23,6 +24,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstance* EmitterM;
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* TransparentWall;
 protected:
 
 	virtual void PostInitializeComponents() override;
