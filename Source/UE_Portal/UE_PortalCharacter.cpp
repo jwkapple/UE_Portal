@@ -144,7 +144,6 @@ void AUE_PortalCharacter::OnFire(bool Color)
 	
 	if(CheckProjectile())
 	{
-		
 		if (ProjectileClass != NULL)
 		{
 			UWorld* const World = GetWorld();

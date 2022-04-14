@@ -27,6 +27,12 @@ APortalCube::APortalCube()
 	{
 		Material = MI.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NS(TEXT("/Game/Effects/CubeDestroy_NS.CubeDestroy_NS"));
+	if(NS.Succeeded())
+	{
+		DestroyEffect = NS.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +48,19 @@ void APortalCube::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	
+}
+
+void APortalCube::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	if(DestroyEffect->IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CUBE DESTRUCTION"));
+
+		FVector SpawnLocation = StaticMesh->GetComponentLocation();
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), DestroyEffect,SpawnLocation , FRotator::ZeroRotator);
+	}
 }
 
 // Called every frame

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "Interactable.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "PortalCube.generated.h"
@@ -19,7 +21,8 @@ public:
 	// Sets default values for this actor's properties
 	APortalCube();
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = Effect)
+	class UNiagaraSystem* DestroyEffect;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
