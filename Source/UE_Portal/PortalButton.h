@@ -48,6 +48,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstance* Material;
 
+	UPROPERTY(EditAnywhere, Category = Child)
+	class AInteractable* Receiver;
+	
 	UPROPERTY(VisibleAnywhere, Category = Sound)
 	USoundCue* OnCue;
 	

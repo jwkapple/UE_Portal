@@ -3,6 +3,7 @@
 
 #include "PortalButton.h"
 
+#include "Interactable.h"
 #include "Components/AudioComponent.h"
 
 // Sets default values
@@ -74,7 +75,11 @@ void APortalButton::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 
 	OnAC->Play();
 	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 1);
-	
+
+	if(Receiver != nullptr)
+	{
+		Receiver->Interact();
+	}
 }
 
 void APortalButton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -83,7 +88,12 @@ void APortalButton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	UE_LOG(LogTemp, Warning, TEXT("Player OFF"));
 
 	OffAC->Play();
-	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 0);	
+	PortalButton->SetScalarParameterValueOnMaterials(TEXT("Activate"), 0);
+
+	if(Receiver != nullptr)
+	{
+		Receiver->Interact();
+	}
 }
 
 

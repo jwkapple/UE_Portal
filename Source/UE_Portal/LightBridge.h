@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interactable.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "LightBridge.generated.h"
 
 UCLASS()
-class UE_PORTAL_API ALightBridge : public AActor
+class UE_PORTAL_API ALightBridge : public AInteractable
 {
 	GENERATED_BODY()
 	
@@ -26,7 +27,12 @@ public:
 	UMaterialInstance* EmitterM;
 
 	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* TransparentWall;
+	UStaticMeshComponent* TransparentWall;
+
+	UPROPERTY(VisibleAnywhere)
+	UMaterialInstance* TW_M;
+
+	bool Activate = false;
 protected:
 
 	virtual void PostInitializeComponents() override;
@@ -37,6 +43,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Interact() override;
 private:
 
 };
