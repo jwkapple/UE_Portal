@@ -53,7 +53,8 @@ void AUE_PortalProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 	{
 		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-		
+
+		//FVector HitLocation = Hit.ImpactPoint + Hit.ImpactNormal * 1.0f;
 		FVector HitLocation = OtherActor->GetActorLocation() + Hit.ImpactNormal * 128.0f;
 		FRotator SpawnRotation = FRotator(Hit.ImpactNormal.Rotation().Pitch + 90.0f, Hit.ImpactNormal.Rotation().Yaw + 180.0f,
 			0.0f);

@@ -48,8 +48,8 @@ void AItemDropper::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CubeSpawnLocation = GetActorLocation() + FVector(0.0f, 50.0f, 40.0f);
-	CubeSpawnRotation = FRotator(30.0f, 30.0f,  0.0f);
+	CubeSpawnLocation = GetActorLocation() + FVector(0.0f, 40.0f, 40.0f);
+	CubeSpawnRotation = FRotator::ZeroRotator;
 	
 	Cube = GetWorld()->SpawnActor<APortalCube>(CubeSpawnLocation, CubeSpawnRotation );
 }

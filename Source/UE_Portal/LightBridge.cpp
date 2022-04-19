@@ -41,6 +41,7 @@ ALightBridge::ALightBridge()
 	}
 	
 	TransparentWall->SetupAttachment(GetRootComponent());
+	TransparentWall->SetCollisionProfileName(TEXT("NoCollision"));
 
 	TW_M = CreateDefaultSubobject<UMaterialInstance>(TEXT("TW_M"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance> TW(TEXT("/Game/tmp/LightBridge_M_Inst.LightBridge_M_Inst"));
